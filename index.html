@@ -1349,6 +1349,10 @@ const DATA_BASE = './data';
 let realDailyData = null;
 let realWeeklyData = null;
 let realMonthlyData = null;
+let realCrsData = null;
+let realOdiData = null;
+let realOverseasAssetData = null;
+let realOverseasCompanyData = null;
 let liveDataActive = false;
 
 function getISOWeek(d) {
@@ -1366,10 +1370,14 @@ async function loadJSONData() {
     const isoWeek = getISOWeek(today);
     const monthStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
 
-    const [daily, weekly, monthly] = await Promise.allSettled([
+    const [daily, weekly, monthly, crs, odi, overseasAsset, overseasCompany] = await Promise.allSettled([
       fetch(`${DATA_BASE}/daily/${dateStr}.json`).then(r => r.ok ? r.json() : null).catch(() => null),
       fetch(`${DATA_BASE}/weekly/${isoWeek}.json`).then(r => r.ok ? r.json() : null).catch(() => null),
       fetch(`${DATA_BASE}/monthly/${monthStr}.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`${DATA_BASE}/crs/latest.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`${DATA_BASE}/odi/latest.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`${DATA_BASE}/overseas_asset/latest.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`${DATA_BASE}/overseas_company/latest.json`).then(r => r.ok ? r.json() : null).catch(() => null),
     ]);
 
     if (daily.status === 'fulfilled' && daily.value && daily.value.topics && daily.value.topics.length) {
@@ -1384,6 +1392,22 @@ async function loadJSONData() {
     }
     if (monthly.status === 'fulfilled' && monthly.value && monthly.value.topics && monthly.value.topics.length) {
       realMonthlyData = monthly.value.topics;
+      liveDataActive = true;
+    }
+    if (crs.status === 'fulfilled' && crs.value && crs.value.topics && crs.value.topics.length) {
+      realCrsData = crs.value.topics;
+      liveDataActive = true;
+    }
+    if (odi.status === 'fulfilled' && odi.value && odi.value.topics && odi.value.topics.length) {
+      realOdiData = odi.value.topics;
+      liveDataActive = true;
+    }
+    if (overseasAsset.status === 'fulfilled' && overseasAsset.value && overseasAsset.value.topics && overseasAsset.value.topics.length) {
+      realOverseasAssetData = overseasAsset.value.topics;
+      liveDataActive = true;
+    }
+    if (overseasCompany.status === 'fulfilled' && overseasCompany.value && overseasCompany.value.topics && overseasCompany.value.topics.length) {
+      realOverseasCompanyData = overseasCompany.value.topics;
       liveDataActive = true;
     }
 
@@ -1402,6 +1426,10 @@ getData = function() {
   if (currentTab === 'daily' && realDailyData) return realDailyData;
   if (currentTab === 'weekly' && realWeeklyData) return realWeeklyData;
   if (currentTab === 'monthly' && realMonthlyData) return realMonthlyData;
+  if (currentTab === 'crs' && realCrsData) return realCrsData;
+  if (currentTab === 'odi' && realOdiData) return realOdiData;
+  if (currentTab === 'overseas_asset' && realOverseasAssetData) return realOverseasAssetData;
+  if (currentTab === 'overseas_company' && realOverseasCompanyData) return realOverseasCompanyData;
   return _origGetData();
 };
 
