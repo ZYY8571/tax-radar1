@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>税讯雷达 — 财税热点聚合平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === RESET & VARIABLES === */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-primary: #0a0a0c;
+  --bg-secondary: #111115;
+  --bg-card: #16161b;
+  --bg-card-hover: #1c1c22;
+  --bg-elevated: #1e1e25;
+  --border: #2a2a33;
+  --border-light: #22222a;
+  --text-primary: #e8e6e1;
+  --text-secondary: #9a978f;
+  --text-muted: #5f5d57;
+  --accent: #c9a44a;
+  --accent-dim: #8b7333;
+  --accent-glow: rgba(201, 164, 74, 0.12);
+  --red-hot: #e05544;
+  --red-dim: rgba(224, 85, 68, 0.15);
+  --orange: #d4873a;
+  --green: #5aad6a;
+  --blue: #4a8fd4;
+  --purple: #8a6ad4;
+  --serif: 'Noto Serif SC', serif;
+  --sans: 'Noto Sans SC', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --radius: 6px;
+  --radius-lg: 10px;
+}
+html { font-size: 15px; scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: var(--bg-primary); }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* === NOISE OVERLAY === */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* === LAYOUT === */
+.app-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* === HEADER === */
+.site-header {
+  padding: 32px 0 0;
+  position: relative;
+}
+.header-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--accent), #e0c56a);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--bg-primary);
+  font-weight: 900;
+  font-family: var(--serif);
+  position: relative;
+  top: -2px;
+}
+.brand h1 {
+  font-family: var(--serif);
+  font-size: 1.65rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+}
+.brand-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.update-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+.pulse-dot {
+  width: 7px; height: 7px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(90,173,106,0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(90,173,106,0); }
+}
+.schedule-info {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+/* === NAV TABS === */
+.nav-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.tab-group {
+  display: flex;
+  gap: 2px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 3px;
+  border: 1px solid var(--border-light);
+}
+.tab-btn {
+  padding: 8px 22px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.25s;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+.tab-btn:hover { color: var(--text-secondary); }
+.tab-btn.active {
+  background: var(--accent);
+  color: var(--bg-primary);
+  font-weight: 600;
+}
+.tab-btn .tab-count {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  margin-left: 4px;
+  opacity: 0.6;
+}
+.tab-btn.active .tab-count { opacity: 0.8; }
+
+/* === CONTROLS === */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sort-select, .source-select {
+  padding: 7px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235f5d57' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+.sort-select:hover, .source-select:hover { border-color: var(--accent-dim); }
+.search-box {
+  position: relative;
+}
+.search-box input {
+  padding: 7px 12px 7px 32px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  border-radius: var(--radius);
+  outline: none;
+  width: 200px;
+  transition: all 0.25s;
+}
+.search-box input::placeholder { color: var(--text-muted); }
+.search-box input:focus { border-color: var(--accent-dim); width: 260px; }
+.search-box svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+/* === SOURCE TAGS === */
+.source-tags {
+  display: flex;
+  gap: 6px;
+  padding: 0 0 16px;
+  flex-wrap: wrap;
+}
+.source-tag {
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  color: var(--text-muted);
+  background: transparent;
+  transition: all 0.2s;
+  font-family: var(--sans);
+  letter-spacing: 0.3px;
+}
+.source-tag:hover { border-color: var(--text-muted); color: var(--text-secondary); }
+.source-tag.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+/* === STATS BAR === */
+.stats-bar {
+  display: flex;
+  gap: 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 20px;
+}
+.stat-item {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.stat-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.stat-value {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+/* === TOPIC CARDS === */
+.topics-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+}
+.topic-card {
+  background: var(--bg-card);
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: 16px;
+  align-items: start;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+.topic-card:hover { background: var(--bg-card-hover); }
+
+.topic-rank {
+  font-family: var(--mono);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-align: center;
+  padding-top: 2px;
+  line-height: 1;
+}
+.topic-rank.top-1 { color: var(--red-hot); }
+.topic-rank.top-2 { color: var(--orange); }
+.topic-rank.top-3 { color: var(--accent); }
+
+.topic-body { min-width: 0; }
+.topic-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.topic-title {
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.topic-card:hover .topic-title { color: var(--accent); }
+.hot-tag {
+  flex-shrink: 0;
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  background: var(--red-dim);
+  color: var(--red-hot);
+  border-radius: 3px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.topic-summary {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.topic-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.meta-tag {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.meta-tag .platform-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.platform-weixin { background: #07c160; }
+.platform-weibo { background: #e6162d; }
+.platform-douyin { background: #fe2c55; }
+.platform-xiaohongshu { background: #ff2442; }
+.platform-zhihu { background: #0066ff; }
+.platform-bilibili { background: #00a1d6; }
+.platform-shipinhao { background: #07c160; }
+
+.topic-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 100px;
+}
+.heat-index {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--red-hot);
+  font-weight: 500;
+}
+.heat-index svg { flex-shrink: 0; }
+.action-btns {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.topic-card:hover .action-btns { opacity: 1; }
+.action-btn {
+  padding: 4px 10px;
+  font-size: 0.68rem;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: all 0.15s;
+}
+.action-btn:hover {
+  border-color: var(--accent-dim);
+  color: var(--accent);
+}
+.action-btn.copied {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+/* === DETAIL MODAL === */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.2s;
+}
+.modal-overlay.show { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  max-width: 680px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 32px;
+  animation: slideUp 0.25s ease-out;
+}
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-close {
+  float: right;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+}
+.modal-close:hover { color: var(--text-primary); }
+.modal-title {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  padding-right: 30px;
+}
+.modal-meta-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.modal-meta-item {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.modal-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin-bottom: 24px;
+}
+.modal-body h4 {
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin: 16px 0 8px;
+  letter-spacing: 0.5px;
+}
+.modal-body ul {
+  padding-left: 18px;
+  margin-bottom: 12px;
+}
+.modal-body li {
+  margin-bottom: 4px;
+}
+.modal-copy-all {
+  padding: 10px 20px;
+  background: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.modal-copy-all:hover { background: #d4af5a; }
+
+/* === WEEKLY / MONTHLY SUMMARY BANNER === */
+.summary-banner {
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(201,164,74,0.06) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 20px;
+  display: none;
+}
+.summary-banner.show { display: block; }
+.summary-banner h3 {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.summary-banner p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.trend-tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.trend-tag {
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  background: var(--accent-glow);
+  border: 1px solid var(--accent-dim);
+  color: var(--accent);
+  border-radius: 20px;
+}
+
+/* === FOOTER === */
+.site-footer {
+  padding: 32px 0;
+  margin-top: 40px;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-left {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.footer-right {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+
+/* === TOAST === */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--green);
+  color: var(--green);
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+  z-index: 2000;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.3s;
+  pointer-events: none;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .header-top { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .header-meta { flex-wrap: wrap; }
+  .nav-section { flex-direction: column; align-items: flex-start; }
+  .topic-card { grid-template-columns: 36px 1fr; }
+  .topic-actions { display: none; }
+  .controls { flex-wrap: wrap; }
+  .search-box input { width: 160px; }
+  .search-box input:focus { width: 200px; }
+  .stats-bar { flex-wrap: wrap; gap: 14px; }
+  .site-footer { flex-direction: column; gap: 8px; }
+}
+
+/* === LOADING SHIMMER === */
+.shimmer {
+  background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* === EMPTY STATE === */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+.empty-state svg { margin-bottom: 16px; opacity: 0.3; }
+.empty-state p { font-size: 0.85rem; }
+
+/* === PAGE LOAD ANIMATION === */
+.fade-in { animation: fadeInUp 0.5s ease-out both; }
+.fade-in-1 { animation-delay: 0.05s; }
+.fade-in-2 { animation-delay: 0.1s; }
+.fade-in-3 { animation-delay: 0.15s; }
+.fade-in-4 { animation-delay: 0.2s; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+  <!-- HEADER -->
+  <header class="site-header fade-in fade-in-1">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-icon">税</div>
+        <div>
+          <h1>税讯雷达</h1>
+          <span class="brand-sub">FISCAL TREND RADAR — 财税热点聚合平台</span>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="schedule-info">自动更新 08:00 / 18:00</div>
+        <div class="update-badge">
+          <span class="pulse-dot"></span>
+          <span id="lastUpdate">UPDATED 2026-03-30 08:00</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="nav-section fade-in fade-in-2">
+    <div class="tab-group">
+      <button class="tab-btn active" data-tab="daily" onclick="switchTab('daily')">每日热点<span class="tab-count">15</span></button>
+      <button class="tab-btn" data-tab="weekly" onclick="switchTab('weekly')">每周汇总<span class="tab-count">TOP20</span></button>
+      <button class="tab-btn" data-tab="monthly" onclick="switchTab('monthly')">每月汇总<span class="tab-count">TOP30</span></button>
+    </div>
+    <div class="controls">
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="搜索财税热点..." id="searchInput" oninput="filterTopics()">
+      </div>
+      <select class="sort-select" id="sortSelect" onchange="sortTopics()">
+        <option value="heat">按热度排序</option>
+        <option value="time">按时间排序</option>
+      </select>
+      <select class="source-select" id="sourceSelect" onchange="filterTopics()">
+        <option value="all">全部来源</option>
+        <option value="微信公众号">微信公众号</option>
+        <option value="微信视频号">微信视频号</option>
+        <option value="微博">微博</option>
+        <option value="抖音">抖音</option>
+        <option value="小红书">小红书</option>
+        <option value="知乎">知乎</option>
+        <option value="B站">B站</option>
+      </select>
+    </div>
+  </nav>
+
+  <!-- SOURCE TAGS -->
+  <div class="source-tags fade-in fade-in-3">
+    <button class="source-tag active" onclick="toggleSource(this, 'all')">全部</button>
+    <button class="source-tag" onclick="toggleSource(this, '微信公众号')">微信公众号</button>
+    <button class="source-tag" onclick="toggleSource(this, '微信视频号')">微信视频号</button>
+    <button class="source-tag" onclick="toggleSource(this, '微博')">微博</button>
+    <button class="source-tag" onclick="toggleSource(this, '抖音')">抖音</button>
+    <button class="source-tag" onclick="toggleSource(this, '小红书')">小红书</button>
+    <button class="source-tag" onclick="toggleSource(this, '知乎')">知乎</button>
+    <button class="source-tag" onclick="toggleSource(this, 'B站')">B站</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-bar fade-in fade-in-3" id="statsBar">
+    <div class="stat-item">
+      <span class="stat-label">今日热点</span>
+      <span class="stat-value" id="statTotal">15</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">覆盖平台</span>
+      <span class="stat-value">7</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">总讨论量</span>
+      <span class="stat-value" id="statDiscussion">2.4M</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">最高热度</span>
+      <span class="stat-value" id="statMaxHeat">9,872</span>
+    </div>
+  </div>
+
+  <!-- SUMMARY BANNERS -->
+  <div class="summary-banner" id="weeklyBanner">
+    <h3>📊 本周财税热点总览 — 第13周（3.24 — 3.30）</h3>
+    <p>本周财税领域聚焦"2026年增值税留抵退税扩围"、"个税专项附加扣除标准调整征求意见"等重磅政策。企业所得税汇算清缴进入冲刺阶段，相关实操内容热度飙升。数字经济税收治理、跨境电商税务合规等前沿话题持续发酵。</p>
+    <div class="trend-tags">
+      <span class="trend-tag">留抵退税扩围</span>
+      <span class="trend-tag">个税扣除调整</span>
+      <span class="trend-tag">汇算清缴</span>
+      <span class="trend-tag">数字税</span>
+      <span class="trend-tag">跨境税务</span>
+    </div>
+  </div>
+  <div class="summary-banner" id="monthlyBanner">
+    <h3>📈 三月财税大事记 — 2026年3月</h3>
+    <p>三月为企业年度汇算清缴核心月份，国务院常务会议通过《关于进一步优化税收营商环境的若干措施》，明确2026年减税降费主基调。全国两会期间财税改革提案引发广泛讨论，地方财政收入结构分化问题受到学界和行业高度关注。</p>
+    <div class="trend-tags">
+      <span class="trend-tag">汇算清缴专题</span>
+      <span class="trend-tag">减税降费</span>
+      <span class="trend-tag">两会财税提案</span>
+      <span class="trend-tag">地方财政</span>
+      <span class="trend-tag">税收营商环境</span>
+      <span class="trend-tag">数电发票</span>
+    </div>
+  </div>
+
+  <!-- TOPICS LIST -->
+  <div class="topics-grid fade-in fade-in-4" id="topicsGrid">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-left">税讯雷达 — 专注财税领域社交媒体热点聚合，为内容创作者提供高效素材</div>
+    <div class="footer-right">AUTO SYNC ACTIVE</div>
+  </footer>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('show')">✕</button>
+    <h2 class="modal-title" id="modalTitle"></h2>
+    <div class="modal-meta-row" id="modalMeta"></div>
+    <div class="modal-body" id="modalBody"></div>
+    <button class="modal-copy-all" onclick="copyAll()">一键复制全部内容</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">已复制到剪贴板</div>
+
+<!-- PLACEHOLDER for JS data and logic -->
+<script>
+// === MOCK DATA ===
+const DAILY_DATA = [
+  {
+    title: "2026年增值税留抵退税政策扩围：新增4个行业纳入范围",
+    summary: "国务院宣布将制造业、批发零售业等4个行业纳入增值税留抵退税扩围范围，预计全年新增退税规模超3000亿元。中小微企业优先受益，申请流程进一步简化。",
+    detail: "国务院常务会议审议通过了关于扩大增值税留抵退税政策覆盖范围的决定。此次扩围新增制造业（中小微企业）、批发零售业、住宿餐饮业、居民服务业四个行业。\n\n<h4>核心脚本要点</h4>\n<ul><li>退税规模：全年预计新增退税3000亿+，覆盖企业超200万户</li><li>申请简化：取消增量留抵退税的"连续6个月"限制条件</li><li>优先群体：小微企业4月起可申请，中型企业6月起，大型企业9月起</li><li>关键对比：2022年大规模退税1.5万亿 vs 2026年聚焦精准定向退税</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>政策解读：哪些企业受益最大？如何判断自己是否在范围内</li><li>实操教程：留抵退税申请全流程（电子税务局操作演示）</li><li>数据对比：近5年退税政策演变与经济刺激效果</li></ul>",
+    source: "微信公众号",
+    platform_class: "platform-weixin",
+    author: "财政部官方发布",
+    time: "2026-03-30 07:30",
+    heat: 9872,
+    discussions: "128.5万",
+    tags: ["增值税", "留抵退税", "减税降费"],
+    isHot: true
+  },
+  {
+    title: "个税专项附加扣除标准拟上调：子女教育、住房贷款等多项调整",
+    summary: "财政部、税务总局就调整个税专项附加扣除标准公开征求意见，子女教育扣除拟从每月2000元提高至3000元，住房贷款利息扣除拟从1000元提高至1500元，预计惠及超2亿纳税人。",
+    detail: "财政部官网发布《关于调整个人所得税专项附加扣除标准的通知（征求意见稿）》，拟对现行6项专项附加扣除中的4项标准进行上调。\n\n<h4>核心脚本要点</h4>\n<ul><li>子女教育：2000元/月→3000元/月（涨幅50%）</li><li>住房贷款利息：1000元/月→1500元/月</li><li>住房租金：800-1500元/月→1200-2000元/月</li><li>赡养老人：3000元/月→4000元/月</li><li>征求意见截止日期：2026年4月30日</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>对比测算：调整前后不同收入群体的个税变化</li><li>热点互动：你希望哪项扣除标准继续提高？</li><li>申报指导：新标准实施后如何在个税APP中更新信息</li></ul>",
+    source: "微博",
+    platform_class: "platform-weibo",
+    author: "中国税务报",
+    time: "2026-03-30 07:45",
+    heat: 9541,
+    discussions: "98.2万",
+    tags: ["个税", "专项附加扣除", "民生"],
+    isHot: true
+  },
+  {
+    title: "2025年度企业所得税汇算清缴进入倒计时：这些易错点必须注意",
+    summary: "距5月31日汇算清缴截止仅剩2个月，各地税务机关密集发布提醒。研发费用加计扣除、资产损失税前扣除、关联交易申报成为今年三大易错重灾区。",
+    detail: "各地税务局纷纷发布2025年度企业所得税汇算清缴温馨提示，重点围绕申报期限、政策变化和常见错误展开。\n\n<h4>核心脚本要点</h4>\n<ul><li>截止日期：2026年5月31日（逾期将产生滞纳金）</li><li>今年新变化：研发费用加计扣除比例从100%调整为120%（部分行业）</li><li>三大易错点：①研发费用归集口径 ②资产损失证据链 ③关联交易同期资料</li><li>电子申报：全面推行数电发票时代下的申报数据比对更严格</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>实操清单：汇算清缴前必做的10项自查</li><li>案例分析：因申报错误被补税罚款的真实案例</li><li>时间规划：最后2个月的汇算清缴倒计时安排表</li></ul>",
+    source: "抖音",
+    platform_class: "platform-douyin",
+    author: "税来税往（头部财税博主）",
+    time: "2026-03-30 06:00",
+    heat: 8734,
+    discussions: "76.3万",
+    tags: ["汇算清缴", "企业所得税", "实操"],
+    isHot: true
+  },
+  {
+    title: "数字经济税收治理白皮书发布：平台企业纳税规则将迎重大变革",
+    summary: "国家税务总局发布《数字经济税收治理指导意见》，明确平台经济、直播电商、数字服务等领域的税收征管框架，平台企业将承担更多涉税信息报送义务。",
+    detail: "税务总局正式发布数字经济税收治理白皮书，系统阐述了对平台经济、数字服务、跨境数字贸易等领域的税收政策框架。\n\n<h4>核心脚本要点</h4>\n<ul><li>平台责任：电商平台需按季度报送商户交易数据和纳税信息</li><li>直播电商：明确主播收入性质认定标准（劳务 vs 经营所得）</li><li>数字服务税：暂不单独开征，但纳入现有税制体系加强征管</li><li>跨境规则：与OECD双支柱方案接轨的国内实施细则</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>深度解读：对普通商家和主播意味着什么</li><li>国际对比：中国数字税方案 vs 欧盟数字服务税</li><li>合规建议：平台商家现在该做哪些税务准备</li></ul>",
+    source: "知乎",
+    platform_class: "platform-zhihu",
+    author: "财税星球",
+    time: "2026-03-30 08:15",
+    heat: 7892,
+    discussions: "52.1万",
+    tags: ["数字经济", "平台税收", "征管改革"]
+  },
+  {
+    title: "小规模纳税人免征增值税政策延续至2027年底",
+    summary: "财政部公告延续小规模纳税人月销售额10万元以下免征增值税政策至2027年12月31日，同时阶段性降低增值税征收率（1%）政策同步延续。",
+    detail: "财政部、税务总局联合发布公告，明确小规模纳税人增值税优惠政策延续安排。\n\n<h4>核心脚本要点</h4>\n<ul><li>免税门槛：月销售额≤10万元（季度≤30万元）继续免征</li><li>征收率：3%→1%的阶段性降低政策延续至2027年底</li><li>适用范围：增值税小规模纳税人（含个体工商户）</li><li>注意事项：开具专票部分不享受免征，需按1%缴纳</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>利好解读：个体户和小微企业的"定心丸"</li><li>实操提醒：如何用好免税额度，合理安排开票节奏</li><li>常见误区：免税≠不申报，零申报也要按时报</li></ul>",
+    source: "微信公众号",
+    platform_class: "platform-weixin",
+    author: "每日税讯",
+    time: "2026-03-30 07:00",
+    heat: 7456,
+    discussions: "43.8万",
+    tags: ["小规模纳税人", "增值税", "税收优惠"]
+  },
+  {
+    title: "注意！多地税务局开展个人出租房屋税收专项检查",
+    summary: "北京、上海、深圳等地税务局启动个人出租房屋税收合规专项行动，通过大数据比对平台信息与纳税申报数据，要求未申报纳税的房东限期补缴。",
+    detail: "多地税务机关利用房产中介平台数据、水电使用数据等多维度信息比对，针对个人出租房屋的税收合规问题开展专项检查。\n\n<h4>核心脚本要点</h4>\n<ul><li>检查范围：个人住宅出租、商铺出租、通过平台短租等</li><li>涉及税种：增值税（月租≤10万免征）、个税（10%或核定1.5%）、房产税（4%）</li><li>数据来源：链家/贝壳等平台数据 + 水电气用量异常分析</li><li>处罚标准：补税+滞纳金（日万分之五），情节严重加处罚款</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>警示科普：房东们别心存侥幸，大数据查税已经落地</li><li>税负测算：租金5000元/月实际需缴多少税</li><li>合规攻略：个人出租房屋的正确纳税方式和流程</li></ul>",
+    source: "小红书",
+    platform_class: "platform-xiaohongshu",
+    author: "税务师姐姐",
+    time: "2026-03-30 09:30",
+    heat: 7102,
+    discussions: "61.2万",
+    tags: ["房屋出租", "个人税收", "税务检查"]
+  },
+  {
+    title: "财务人必看：2026年新会计准则变更要点全梳理",
+    summary: "财政部发布2026年度企业会计准则修订汇总，涉及收入确认、租赁、金融工具等多项准则的细化和调整，对财务核算实操影响深远。",
+    detail: "财政部会计司发布年度会计准则修订和解释公告汇总，对企业财务人员的日常核算工作产生直接影响。\n\n<h4>核心脚本要点</h4>\n<ul><li>收入准则：履约进度计量方法进一步细化，新增数字产品收入确认指引</li><li>租赁准则：短期租赁豁免门槛从12个月调整、新增转租处理规定</li><li>金融工具：预期信用损失模型的简化处理方法（适用中小企业）</li><li>可持续披露：ESG相关财务信息披露指引（推荐执行）</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>逐条解读：每项变更对日常做账的具体影响</li><li>前后对比：新旧准则的核心差异表</li><li>实务案例：变更后的账务处理分录示例</li></ul>",
+    source: "B站",
+    platform_class: "platform-bilibili",
+    author: "马靖昊说会计",
+    time: "2026-03-30 10:00",
+    heat: 6543,
+    discussions: "34.7万",
+    tags: ["会计准则", "财务核算", "实操"]
+  },
+  {
+    title: "跨境电商出口退税新规：综试区企业可享"无票免税"扩围",
+    summary: "商务部、税务总局联合发文扩大跨境电商综试区"无票免税"政策范围，新增15个综试区适用，同时明确出口退税电子化申报全流程。",
+    detail: "跨境电商综合试验区出口退税改革方案进一步优化，为中小跨境电商卖家降低合规成本。\n\n<h4>核心脚本要点</h4>\n<ul><li>无票免税：综试区内企业出口无法取得进项发票的，免征增值税</li><li>新增范围：15个新增综试区城市名单（含郑州、长沙、昆明等）</li><li>退税电子化：全流程线上办理，审批时限从20个工作日缩至10个</li><li>所得税核定：年销售额5000万以下的，应税所得率按4%核定</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>利好分析：跨境卖家的税务成本能降多少</li><li>操作指南：如何申请"无票免税"资格</li><li>风险提示：享受政策的合规底线在哪里</li></ul>",
+    source: "微信公众号",
+    platform_class: "platform-weixin",
+    author: "跨境税务通",
+    time: "2026-03-30 08:45",
+    heat: 6234,
+    discussions: "28.9万",
+    tags: ["跨境电商", "出口退税", "综试区"]
+  },
+  {
+    title: "年薪百万实际到手多少？2026最新个税税负测算引发热议",
+    summary: "知乎、微博上"年薪百万税后到手多少钱"话题引发数十万人讨论，网友纷纷晒出工资条和个税APP截图，高收入群体税负感受成为热门议题。",
+    detail: "社交媒体上关于高收入群体个人所得税税负的讨论持续升温，大量网友分享自己的真实税负情况。\n\n<h4>核心脚本要点</h4>\n<ul><li>测算数据：年薪100万，扣除五险一金和专项附加扣除后，个税约17-22万</li><li>边际税率：月薪超8万元部分适用45%最高边际税率</li><li>热议焦点：劳动所得最高45% vs 资本利得20%，是否公平</li><li>国际对比：中国个税最高边际税率在全球处于中高水平</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>科普测算：不同年薪水平的个税全景图</li><li>争议讨论：45%的最高税率是否合理</li><li>合法节税：高收入人群的税务规划思路（公积金、年终奖优化）</li></ul>",
+    source: "知乎",
+    platform_class: "platform-zhihu",
+    author: "知乎财税话题",
+    time: "2026-03-30 11:00",
+    heat: 6102,
+    discussions: "87.6万",
+    tags: ["个税", "税负", "高收入"]
+  },
+  {
+    title: "数电发票全面推广：纸质发票时代即将终结",
+    summary: "税务总局宣布2026年底前数电发票将覆盖全国所有地区和纳税人，纸质增值税发票将逐步退出历史舞台，企业需尽快完成系统升级适配。",
+    detail: "数电发票（全面数字化的电子发票）全面推广时间表正式发布，标志着中国发票管理进入新纪元。\n\n<h4>核心脚本要点</h4>\n<ul><li>时间表：2026年6月起全国统一推行，年底前实现全覆盖</li><li>核心变化：取消发票领用环节，系统自动赋予开票额度</li><li>格式统一：增值税专用发票和普通发票合并为统一格式</li><li>企业影响：ERP系统、财务软件需升级，发票管理流程重塑</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>变革解读：数电发票与传统发票的本质区别</li><li>操作教程：企业如何快速适配数电发票系统</li><li>财务影响：报销流程、账务处理、档案管理的全面变化</li></ul>",
+    source: "微信视频号",
+    platform_class: "platform-shipinhao",
+    author: "财税早知道",
+    time: "2026-03-30 07:15",
+    heat: 5876,
+    discussions: "39.4万",
+    tags: ["数电发票", "发票改革", "数字化"]
+  },
+  {
+    title: "抖音财税博主年入千万？揭秘财税知识付费的商业逻辑",
+    summary: "财税知识付费赛道爆发，多位头部财税博主通过课程销售、咨询服务年收入超千万，引发行业关于"卖课还是做业务"的讨论。",
+    detail: "抖音、视频号等平台上的财税知识付费市场规模持续增长，形成了独特的商业生态。\n\n<h4>核心脚本要点</h4>\n<ul><li>市场规模：2025年财税知识付费市场约80亿元，同比增长45%</li><li>头部效应：TOP10博主占据30%以上市场份额</li><li>内容形态：短视频引流+直播转化+私域社群运营</li><li>争议焦点：部分课程内容质量参差不齐，存在过度营销问题</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>行业观察：财税知识付费的现状与未来</li><li>避坑指南：如何辨别优质财税课程</li><li>创业参考：财税领域自媒体的变现路径</li></ul>",
+    source: "抖音",
+    platform_class: "platform-douyin",
+    author: "财经观察室",
+    time: "2026-03-30 12:30",
+    heat: 5234,
+    discussions: "45.8万",
+    tags: ["知识付费", "财税自媒体", "行业观察"]
+  },
+  {
+    title: "地方财政收入分化加剧：多省土地出让金收入降幅超40%",
+    summary: "财政部公布2025年地方财政决算数据，土地出让收入持续走低，部分省份降幅超40%。地方政府财政压力与转型路径成为热点话题。",
+    detail: "财政部发布的最新财政数据引发了对地方财政可持续性的广泛讨论。\n\n<h4>核心脚本要点</h4>\n<ul><li>数据速览：2025年全国土地出让收入同比下降18.7%</li><li>区域分化：东部省份降幅较小，中西部部分省份降幅40%以上</li><li>应对之策：消费税下划、数据财政、股权财政等替代方案探讨</li><li>民生影响：部分地区公共服务支出面临压缩压力</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>数据可视化：全国各省土地财政依赖度地图</li><li>深度分析：后土地财政时代，地方收入靠什么</li><li>政策前瞻：消费税改革对地方财政的影响测算</li></ul>",
+    source: "微博",
+    platform_class: "platform-weibo",
+    author: "财政学人",
+    time: "2026-03-30 09:00",
+    heat: 4987,
+    discussions: "31.2万",
+    tags: ["地方财政", "土地出让", "财政改革"]
+  },
+  {
+    title: "研发费用加计扣除新政：120%比例适用行业扩大",
+    summary: "税务总局明确2026年起研发费用加计扣除120%的优惠比例从集成电路和工业母机行业扩展至人工智能、量子计算、生物医药等战略新兴产业。",
+    detail: "研发费用加计扣除政策持续加码，体现国家对科技创新的税收支持力度。\n\n<h4>核心脚本要点</h4>\n<ul><li>新增行业：AI、量子计算、生物医药、新能源、高端装备制造</li><li>扣除比例：120%（较通用的100%提高20个百分点）</li><li>适用条件：以相关业务收入占比超50%为主业认定标准</li><li>预缴申报：7月和10月预缴时即可享受，无需等汇算清缴</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>政策详解：哪些企业能享受120%的加计扣除</li><li>实操指导：研发费用归集的关键注意事项</li><li>节税测算：加计扣除从100%到120%实际少缴多少税</li></ul>",
+    source: "微信公众号",
+    platform_class: "platform-weixin",
+    author: "税政解读",
+    time: "2026-03-30 08:00",
+    heat: 4765,
+    discussions: "22.1万",
+    tags: ["研发费用", "加计扣除", "科技创新"]
+  },
+  {
+    title: "会计人考证内卷：CPA vs 税务师 vs CMA，2026年该考哪个",
+    summary: "考证季来临，社交媒体上关于财税类证书含金量、备考策略的讨论升温。CPA报名人数连续3年下降引发"CPA是否还值得考"的热议。",
+    detail: "每年3-4月是财税类考试报名季，今年关于考证选择和价值的讨论尤为激烈。\n\n<h4>核心脚本要点</h4>\n<ul><li>CPA现状：2025年报名人数降至98万，较巅峰期下降42%</li><li>税务师：报名人数逆势增长15%，实务需求旺盛</li><li>CMA趋势：企业认可度提升，管理会计转型热</li><li>新兴方向：数电发票管理师、ESG分析师等新证书兴起</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>横向对比：三大证书的时间投入、通过率、薪资回报</li><li>过来人说：持证人的真实收入和职业发展</li><li>备考建议：不同职业阶段该如何选择证书</li></ul>",
+    source: "小红书",
+    platform_class: "platform-xiaohongshu",
+    author: "考证女孩日记",
+    time: "2026-03-30 13:00",
+    heat: 4321,
+    discussions: "56.3万",
+    tags: ["CPA", "税务师", "职业发展"]
+  },
+  {
+    title: "一人公司税务筹划全攻略：如何合法降低综合税负至10%以下",
+    summary: "B站上一期关于一人有限公司与个体户税务筹划对比的视频播放量突破200万，评论区引发大量关于合法节税方案的讨论。",
+    detail: "关于小微经营主体的税务优化方案在社交媒体上获得巨大关注，反映了创业者对税务成本的高度敏感。\n\n<h4>核心脚本要点</h4>\n<ul><li>方案对比：个体户（核定征收）vs 一人有限公司 vs 个人独资企业</li><li>税负测算：年利润100万元下三种方案的综合税负对比</li><li>核定征收：部分地区对个体户仍保留核定征收政策（综合税率2-5%）</li><li>风险提示：虚开发票、滥用核定征收的法律风险</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>方案对比：用具体数字说明不同方案的税负差异</li><li>合规底线：节税与避税的边界在哪里</li><li>实操建议：不同业务类型适合选择哪种经营主体</li></ul>",
+    source: "B站",
+    platform_class: "platform-bilibili",
+    author: "大白说税",
+    time: "2026-03-30 14:00",
+    heat: 4102,
+    discussions: "38.7万",
+    tags: ["税务筹划", "一人公司", "节税"]
+  }
+];
+
+const WEEKLY_DATA = [
+  { title: "增值税留抵退税扩围政策深度解析与企业应对", summary: "本周最热财税话题，国务院宣布留抵退税新增4个行业，全网讨论超500万次。从政策出台背景、适用范围到申报流程的全方位解读。", source: "微信公众号", platform_class: "platform-weixin", author: "综合多平台", time: "2026-03-24 — 03-30", heat: 9872, discussions: "512万", tags: ["留抵退税", "增值税", "重磅政策"], isHot: true, detail: "本周增值税留抵退税扩围政策持续霸榜各平台热搜。\n\n<h4>本周传播脉络</h4>\n<ul><li>周一：国务院常务会议审议通过决定</li><li>周二-周三：政策细则解读视频爆发，抖音相关话题播放量超3亿</li><li>周四：各地税务局发布本地化实施指引</li><li>周五-周日：企业实操类内容热度持续，知乎问答超2万条</li></ul>" },
+  { title: "个税专项附加扣除调整：全民关注的减税红利", summary: "财政部征求意见稿发布后引发全民热议，微博相关话题阅读量超8亿，成为本周第二大财税热点。", source: "微博", platform_class: "platform-weibo", author: "综合多平台", time: "2026-03-24 — 03-30", heat: 9541, discussions: "398万", tags: ["个税", "减税", "民生"], isHot: true, detail: "个税专项附加扣除调整征求意见稿引发全民关注。\n\n<h4>舆情数据</h4>\n<ul><li>微博话题#个税扣除标准要涨了#阅读量8.2亿</li><li>抖音相关视频播放量超5亿</li><li>知乎问题"如何看待个税扣除标准上调"获2.8万关注</li></ul>" },
+  { title: "汇算清缴倒计时：企业所得税年报实操全指南", summary: "距截止日不足2个月，汇算清缴相关内容本周搜索量环比增长180%，各平台财税博主密集产出实操内容。", source: "抖音", platform_class: "platform-douyin", author: "综合多平台", time: "2026-03-24 — 03-30", heat: 8734, discussions: "287万", tags: ["汇算清缴", "企业所得税", "年报"], detail: "汇算清缴进入冲刺期。\n\n<h4>本周内容趋势</h4>\n<ul><li>实操教程类视频平均播放量提升120%</li><li>"汇算清缴常见错误"系列笔记登上小红书热门</li><li>B站长视频教程弹幕互动量创新高</li></ul>" },
+  { title: "数字经济税收治理：平台企业的税务合规新时代", summary: "白皮书发布引发科技和财税两个圈子的交叉讨论，知乎专业解读长文频出，B站深度分析视频热度飙升。", source: "知乎", platform_class: "platform-zhihu", author: "综合多平台", time: "2026-03-24 — 03-30", heat: 7892, discussions: "195万", tags: ["数字经济", "平台税收", "合规"], detail: "数字经济税收政策成为跨圈层热议话题。" },
+  { title: "房屋出租税收合规大数据查税引发房东恐慌", summary: "多地开展个人出租房屋专项检查的消息引发广泛关注，小红书和抖音上大量房东分享被约谈经历。", source: "小红书", platform_class: "platform-xiaohongshu", author: "综合多平台", time: "2026-03-24 — 03-30", heat: 7102, discussions: "243万", tags: ["房屋出租", "大数据查税", "个人纳税"], detail: "房东纳税合规话题本周热度飙升。" },
+  { title: "小规模纳税人优惠延续：中小微企业的"及时雨"", summary: "免税政策延续至2027年的消息为中小微企业注入信心，微信公众号解读文章平均阅读10万+。", source: "微信公众号", platform_class: "platform-weixin", author: "综合多平台", time: "2026-03-24 — 03-30", heat: 7456, discussions: "156万", tags: ["小规模纳税人", "免税", "中小微"], detail: "小规模纳税人优惠延续引发广泛好评。" },
+  { title: "数电发票全面推广时间表：纸质发票退出倒计时", summary: "数电发票全覆盖时间表公布后，企业端ERP升级需求激增，相关实操内容热度本周排名第七。", source: "微信视频号", platform_class: "platform-shipinhao", author: "综合多平台", time: "2026-03-24 — 03-30", heat: 5876, discussions: "148万", tags: ["数电发票", "全面推广", "系统升级"], detail: "数电发票推广进入加速期。" },
+  { title: "研发费用加计扣除120%扩围：科创企业的重大利好", summary: "新增5大行业享受120%加计扣除，企业如何判定资格、如何归集研发费用成为讨论焦点。", source: "微信公众号", platform_class: "platform-weixin", author: "综合多平台", time: "2026-03-24 — 03-30", heat: 4765, discussions: "98万", tags: ["研发加计扣除", "科创", "产业政策"], detail: "研发费用加计扣除政策加码。" },
+  { title: "CPA报名人数三连降：财会考证市场的冷思考", summary: "CPA报名人数降至98万引发行业反思，"CPA还值不值得考"的讨论在各平台蔓延。", source: "小红书", platform_class: "platform-xiaohongshu", author: "综合多平台", time: "2026-03-24 — 03-30", heat: 4321, discussions: "178万", tags: ["CPA", "职业发展", "行业趋势"], detail: "CPA报名数据引发行业热议。" },
+  { title: "跨境电商税务合规：无票免税扩围的机遇与风险", summary: "跨境电商税收新规引发出海卖家群体广泛讨论，合规与优化并重的内容最受欢迎。", source: "微信公众号", platform_class: "platform-weixin", author: "综合多平台", time: "2026-03-24 — 03-30", heat: 6234, discussions: "87万", tags: ["跨境电商", "出口退税", "合规"], detail: "跨境税务话题持续升温。" }
+];
+
+const MONTHLY_DATA = [
+  { title: "两会财税提案全盘点：2026年税改方向浮出水面", summary: "全国两会期间，代表委员提交财税相关提案超120件，涉及个税改革、消费税下划、遗产税立法等热点议题，勾勒出2026年税制改革路线图。", source: "微博", platform_class: "platform-weibo", author: "综合多平台", time: "2026年3月", heat: 9950, discussions: "1280万", tags: ["两会", "税改", "提案"], isHot: true, detail: "两会财税提案成为三月最受关注的财税话题。\n\n<h4>重点提案方向</h4>\n<ul><li>个税改革：呼吁降低最高边际税率、扩大综合所得范围</li><li>消费税：加快后移征收环节并下划地方</li><li>遗产税/房产税：立法呼声再起</li><li>数字经济税收：完善平台经济税收制度</li></ul>" },
+  { title: "增值税留抵退税扩围：三月最重磅财税政策", summary: "月末发布的留抵退税扩围政策成为本月份量最重的财税新规，预计影响超200万户企业，全网讨论超千万次。", source: "微信公众号", platform_class: "platform-weixin", author: "综合多平台", time: "2026年3月", heat: 9872, discussions: "1050万", tags: ["留抵退税", "增值税", "政策"], isHot: true, detail: "留抵退税政策延续了近年来积极财政政策的基调。" },
+  { title: "2025年度企业所得税汇算清缴全攻略", summary: "三月是汇算清缴准备的关键月份，相关实操内容全月持续高热度，累计产生优质内容超5万篇/条。", source: "抖音", platform_class: "platform-douyin", author: "综合多平台", time: "2026年3月", heat: 9200, discussions: "890万", tags: ["汇算清缴", "所得税", "实操"], isHot: true, detail: "汇算清缴实操内容贯穿整月。" },
+  { title: "个税专项附加扣除标准调整征求意见", summary: "月末发布的征求意见稿引爆全网讨论，涉及千家万户的切身利益，微博话题阅读量超8亿。", source: "微博", platform_class: "platform-weibo", author: "综合多平台", time: "2026年3月", heat: 9541, discussions: "980万", tags: ["个税", "民生", "扣除标准"], detail: "个税扣除标准上调成为月末最大民生财税热点。" },
+  { title: "数字经济税收治理框架正式发布", summary: "平台经济、直播电商、数字服务领域的税收征管规则明确，标志着数字经济税收进入制度化新阶段。", source: "知乎", platform_class: "platform-zhihu", author: "综合多平台", time: "2026年3月", heat: 8500, discussions: "620万", tags: ["数字经济", "平台", "征管"], detail: "数字经济税收治理制度化。" },
+  { title: "数电发票全面推广路线图公布", summary: "2026年底全覆盖的时间表确定，企业数字化转型需求激增，ERP厂商迎来升级潮。", source: "微信视频号", platform_class: "platform-shipinhao", author: "综合多平台", time: "2026年3月", heat: 7800, discussions: "480万", tags: ["数电发票", "数字化", "企业升级"], detail: "数电发票推广进入快车道。" },
+  { title: "地方财政收入结构分化专题分析", summary: "财政部公布2025年决算数据后，地方财政可持续性话题贯穿全月讨论，学术界和实务界产出大量深度内容。", source: "知乎", platform_class: "platform-zhihu", author: "综合多平台", time: "2026年3月", heat: 7200, discussions: "350万", tags: ["地方财政", "土地出让", "财政改革"], detail: "地方财政话题引发深度讨论。" },
+  { title: "多地开展个人出租房屋税收专项检查", summary: "大数据查税落地引发社会广泛关注，房东群体税务合规意识显著提升，相关咨询量激增300%。", source: "小红书", platform_class: "platform-xiaohongshu", author: "综合多平台", time: "2026年3月", heat: 7102, discussions: "560万", tags: ["房屋出租", "查税", "合规"], detail: "房东纳税合规话题持续发酵。" },
+  { title: "研发费用加计扣除政策持续加码", summary: "新增5大行业享受120%扣除比例，叠加预缴即享政策，科创企业税收优惠力度创新高。", source: "微信公众号", platform_class: "platform-weixin", author: "综合多平台", time: "2026年3月", heat: 6500, discussions: "280万", tags: ["研发加计扣除", "科创", "税收优惠"], detail: "研发税收优惠政策进一步升级。" },
+  { title: "财税知识付费市场爆发：机遇与乱象并存", summary: "头部财税博主收入曝光引发行业讨论，内容质量参差不齐问题引起监管关注。", source: "抖音", platform_class: "platform-douyin", author: "综合多平台", time: "2026年3月", heat: 5800, discussions: "380万", tags: ["知识付费", "自媒体", "行业生态"], detail: "财税自媒体行业生态引发关注。" }
+];
+
+// === STATE ===
+let currentTab = 'daily';
+let currentSource = 'all';
+let currentSort = 'heat';
+let currentSearch = '';
+
+// === RENDER FUNCTIONS ===
+function getData() {
+  if (currentTab === 'daily') return DAILY_DATA;
+  if (currentTab === 'weekly') return WEEKLY_DATA;
+  return MONTHLY_DATA;
+}
+
+function filterAndSort(data) {
+  let filtered = [...data];
+  if (currentSource !== 'all') {
+    filtered = filtered.filter(d => d.source === currentSource);
+  }
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    filtered = filtered.filter(d =>
+      d.title.toLowerCase().includes(q) ||
+      d.summary.toLowerCase().includes(q) ||
+      d.tags.some(t => t.toLowerCase().includes(q))
+    );
+  }
+  if (currentSort === 'heat') {
+    filtered.sort((a, b) => b.heat - a.heat);
+  } else {
+    filtered.sort((a, b) => {
+      if (b.time > a.time) return 1;
+      if (b.time < a.time) return -1;
+      return 0;
+    });
+  }
+  return filtered;
+}
+
+function formatHeat(n) {
+  if (n >= 10000) return (n / 10000).toFixed(1) + '万';
+  return n.toLocaleString();
+}
+
+function renderTopics() {
+  const grid = document.getElementById('topicsGrid');
+  const data = filterAndSort(getData());
+
+  document.getElementById('statTotal').textContent = data.length;
+
+  if (data.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="background:var(--bg-card);padding:60px;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <p>暂无匹配的财税热点</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = data.map((item, idx) => {
+    const rankClass = idx === 0 ? 'top-1' : idx === 1 ? 'top-2' : idx === 2 ? 'top-3' : '';
+    return `
+    <div class="topic-card" onclick="openDetail(${idx})">
+      <div class="topic-rank ${rankClass}">${String(idx + 1).padStart(2, '0')}</div>
+      <div class="topic-body">
+        <div class="topic-header">
+          <div class="topic-title">${item.title}</div>
+          ${item.isHot ? '<span class="hot-tag">爆</span>' : ''}
+        </div>
+        <div class="topic-summary">${item.summary}</div>
+        <div class="topic-meta">
+          <span class="meta-tag"><span class="platform-dot ${item.platform_class}"></span>${item.source}</span>
+          <span class="meta-tag">${item.author || ''}</span>
+          <span class="meta-tag">${item.time}</span>
+          <span class="meta-tag">讨论 ${item.discussions}</span>
+          ${item.tags ? item.tags.map(t => `<span class="meta-tag" style="color:var(--accent-dim);">#${t}</span>`).join('') : ''}
+        </div>
+      </div>
+      <div class="topic-actions">
+        <div class="heat-index">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 23c-4.97 0-9-3.58-9-8 0-3.19 2.13-6.12 3.5-7.5.61-.61 1.5-.18 1.5.7v1.3c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V2.5c0-.83.67-1.5 1.5-1.5.38 0 .74.14 1.02.39C17.29 4.82 21 9.2 21 15c0 4.42-4.03 8-9 8z"/></svg>
+          ${formatHeat(item.heat)}
+        </div>
+        <div class="action-btns">
+          <button class="action-btn" onclick="event.stopPropagation();copyItem(${idx}, this)">复制</button>
+          <button class="action-btn" onclick="event.stopPropagation();openDetail(${idx})">详情</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// === TAB SWITCHING ===
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+  document.getElementById('weeklyBanner').classList.toggle('show', tab === 'weekly');
+  document.getElementById('monthlyBanner').classList.toggle('show', tab === 'monthly');
+
+  const statsLabel = document.querySelector('.stat-item:first-child .stat-label');
+  if (tab === 'daily') statsLabel.textContent = '今日热点';
+  else if (tab === 'weekly') statsLabel.textContent = '本周热点';
+  else statsLabel.textContent = '本月热点';
+
+  renderTopics();
+}
+
+// === FILTERING ===
+function toggleSource(el, source) {
+  document.querySelectorAll('.source-tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentSource = source;
+  document.getElementById('sourceSelect').value = source;
+  renderTopics();
+}
+
+function filterTopics() {
+  currentSource = document.getElementById('sourceSelect').value;
+  currentSearch = document.getElementById('searchInput').value;
+  // sync source tags
+  document.querySelectorAll('.source-tag').forEach(t => {
+    const src = t.textContent.trim();
+    if (currentSource === 'all' && src === '全部') t.classList.add('active');
+    else if (src === currentSource) t.classList.add('active');
+    else t.classList.remove('active');
+  });
+  renderTopics();
+}
+
+function sortTopics() {
+  currentSort = document.getElementById('sortSelect').value;
+  renderTopics();
+}
+
+// === COPY ===
+function copyItem(idx, btnEl) {
+  const data = filterAndSort(getData());
+  const item = data[idx];
+  const text = `【${item.title}】\n${item.summary}\n来源：${item.source} | ${item.time} | 热度：${item.heat}\n标签：${item.tags ? item.tags.map(t => '#' + t).join(' ') : ''}`;
+  navigator.clipboard.writeText(text).then(() => {
+    if (btnEl) {
+      btnEl.classList.add('copied');
+      btnEl.textContent = '已复制';
+      setTimeout(() => { btnEl.classList.remove('copied'); btnEl.textContent = '复制'; }, 1500);
+    }
+    showToast();
+  });
+}
+
+function copyAll() {
+  const title = document.getElementById('modalTitle').textContent;
+  const body = document.getElementById('modalBody').innerText;
+  const meta = document.getElementById('modalMeta').innerText;
+  const text = `【${title}】\n${meta}\n\n${body}`;
+  navigator.clipboard.writeText(text).then(() => showToast());
+}
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// === MODAL ===
+function openDetail(idx) {
+  const data = filterAndSort(getData());
+  const item = data[idx];
+  document.getElementById('modalTitle').textContent = item.title;
+  document.getElementById('modalMeta').innerHTML = `
+    <span class="modal-meta-item"><span class="platform-dot ${item.platform_class}"></span>${item.source}</span>
+    <span class="modal-meta-item">${item.author || ''}</span>
+    <span class="modal-meta-item">${item.time}</span>
+    <span class="modal-meta-item" style="color:var(--red-hot);">热度 ${formatHeat(item.heat)}</span>
+    <span class="modal-meta-item">讨论 ${item.discussions}</span>
+  `;
+  document.getElementById('modalBody').innerHTML = item.detail || `<p>${item.summary}</p>`;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('show');
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('show');
+});
+
+// === AUTO-UPDATE SIMULATION ===
+function updateTimestamp() {
+  const now = new Date();
+  const h = now.getHours();
+  let updateTime;
+  if (h < 8) updateTime = '前日 18:00';
+  else if (h < 18) updateTime = '今日 08:00';
+  else updateTime = '今日 18:00';
+  document.getElementById('lastUpdate').textContent = `UPDATED ${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${updateTime}`;
+}
+
+// === BACKEND API INTEGRATION ===
+// 当后端服务运行时，自动从 API 加载真实数据替换模拟数据
+const API_BASE = window.API_BASE || '/api';
+let useBackend = false;
+
+async function fetchFromAPI(endpoint, params = {}) {
+  const url = new URL(endpoint, window.location.origin);
+  Object.entries(params).forEach(([k, v]) => {
+    if (v !== null && v !== undefined && v !== '') url.searchParams.set(k, v);
+  });
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    return await resp.json();
+  } catch (e) {
+    console.warn('API 请求失败，使用本地数据:', e.message);
+    return null;
+  }
+}
+
+async function loadLiveData() {
+  // 检测后端是否可用
+  try {
+    const status = await fetchFromAPI(`${API_BASE}/status`);
+    if (!status || status.status !== 'running') return;
+    useBackend = true;
+    console.log('后端 API 已连接，切换到实时数据');
+    document.querySelector('.footer-right').textContent = 'LIVE API CONNECTED';
+  } catch {
+    return;
+  }
+}
+
+async function fetchTabData() {
+  if (!useBackend) return null;
+  const endpoint = currentTab === 'daily' ? `${API_BASE}/topics/daily`
+    : currentTab === 'weekly' ? `${API_BASE}/topics/weekly`
+    : `${API_BASE}/topics/monthly`;
+  const params = {};
+  if (currentSource !== 'all') params.source = currentSource;
+  if (currentSearch) params.keyword = currentSearch;
+  params.sort = currentSort;
+  const data = await fetchFromAPI(endpoint, params);
+  if (data && data.topics) {
+    // 更新时间戳
+    if (data.updated_at) {
+      document.getElementById('lastUpdate').textContent = `UPDATED ${data.updated_at.slice(0, 16).replace('T', ' ')}`;
+    }
+    return data.topics;
+  }
+  return null;
+}
+
+// 覆写 renderTopics 以支持后端数据
+const _originalRenderTopics = renderTopics;
+renderTopics = async function () {
+  if (useBackend) {
+    const liveData = await fetchTabData();
+    if (liveData) {
+      // 临时替换 getData 返回值
+      const grid = document.getElementById('topicsGrid');
+      const data = liveData;
+      document.getElementById('statTotal').textContent = data.length;
+
+      if (data.length === 0) {
+        grid.innerHTML = `<div class="empty-state" style="background:var(--bg-card);padding:60px;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <p>暂无匹配的财税热点</p></div>`;
+        return;
+      }
+
+      // 存储以供 modal 和 copy 使用
+      window._liveData = data;
+      grid.innerHTML = data.map((item, idx) => {
+        const rankClass = idx === 0 ? 'top-1' : idx === 1 ? 'top-2' : idx === 2 ? 'top-3' : '';
+        return `
+        <div class="topic-card" onclick="openLiveDetail(${idx})">
+          <div class="topic-rank ${rankClass}">${String(idx + 1).padStart(2, '0')}</div>
+          <div class="topic-body">
+            <div class="topic-header">
+              <div class="topic-title">${item.title}</div>
+              ${item.is_hot ? '<span class="hot-tag">爆</span>' : ''}
+            </div>
+            <div class="topic-summary">${item.summary}</div>
+            <div class="topic-meta">
+              <span class="meta-tag"><span class="platform-dot ${item.platform_class || ''}"></span>${item.source}</span>
+              <span class="meta-tag">${item.author || ''}</span>
+              <span class="meta-tag">${item.time}</span>
+              <span class="meta-tag">讨论 ${item.discussions || '—'}</span>
+              ${(item.tags || []).map(t => `<span class="meta-tag" style="color:var(--accent-dim);">#${t}</span>`).join('')}
+            </div>
+          </div>
+          <div class="topic-actions">
+            <div class="heat-index">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 23c-4.97 0-9-3.58-9-8 0-3.19 2.13-6.12 3.5-7.5.61-.61 1.5-.18 1.5.7v1.3c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V2.5c0-.83.67-1.5 1.5-1.5.38 0 .74.14 1.02.39C17.29 4.82 21 9.2 21 15c0 4.42-4.03 8-9 8z"/></svg>
+              ${formatHeat(item.heat)}
+            </div>
+            <div class="action-btns">
+              <button class="action-btn" onclick="event.stopPropagation();copyLiveItem(${idx}, this)">复制</button>
+              <button class="action-btn" onclick="event.stopPropagation();openLiveDetail(${idx})">详情</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+      return;
+    }
+  }
+  _originalRenderTopics();
+};
+
+function openLiveDetail(idx) {
+  const item = window._liveData[idx];
+  if (!item) return;
+  document.getElementById('modalTitle').textContent = item.title;
+  document.getElementById('modalMeta').innerHTML = `
+    <span class="modal-meta-item"><span class="platform-dot ${item.platform_class || ''}"></span>${item.source}</span>
+    <span class="modal-meta-item">${item.author || ''}</span>
+    <span class="modal-meta-item">${item.time}</span>
+    <span class="modal-meta-item" style="color:var(--red-hot);">热度 ${formatHeat(item.heat)}</span>
+    <span class="modal-meta-item">讨论 ${item.discussions || '—'}</span>
+  `;
+  document.getElementById('modalBody').innerHTML = item.detail || `<p>${item.summary}</p>`;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function copyLiveItem(idx, btnEl) {
+  const item = window._liveData[idx];
+  if (!item) return;
+  const text = `【${item.title}】\n${item.summary}\n来源：${item.source} | ${item.time} | 热度：${item.heat}\n${item.url ? '链接：' + item.url + '\n' : ''}标签：${(item.tags || []).map(t => '#' + t).join(' ')}`;
+  navigator.clipboard.writeText(text).then(() => {
+    if (btnEl) {
+      btnEl.classList.add('copied');
+      btnEl.textContent = '已复制';
+      setTimeout(() => { btnEl.classList.remove('copied'); btnEl.textContent = '复制'; }, 1500);
+    }
+    showToast();
+  });
+}
+
+// === INIT ===
+updateTimestamp();
+loadLiveData().then(() => renderTopics());
+</script>
+</body>
+</html>
