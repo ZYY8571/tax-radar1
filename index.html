@@ -1193,148 +1193,66 @@ function updateTimestamp() {
   document.getElementById('lastUpdate').textContent = `UPDATED ${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${updateTime}`;
 }
 
-// === BACKEND API INTEGRATION ===
-// 当后端服务运行时，自动从 API 加载真实数据替换模拟数据
-const API_BASE = window.API_BASE || '/api';
-let useBackend = false;
+// === DATA LOADING FROM JSON FILES ===
+const DATA_BASE = './data';
+let realDailyData = null;
+let realWeeklyData = null;
+let realMonthlyData = null;
+let liveDataActive = false;
 
-async function fetchFromAPI(endpoint, params = {}) {
-  const url = new URL(endpoint, window.location.origin);
-  Object.entries(params).forEach(([k, v]) => {
-    if (v !== null && v !== undefined && v !== '') url.searchParams.set(k, v);
-  });
-  try {
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    return await resp.json();
-  } catch (e) {
-    console.warn('API 请求失败，使用本地数据:', e.message);
-    return null;
+function getISOWeek(d) {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
+  return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+}
+
+async function loadJSONData() {
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const isoWeek = getISOWeek(today);
+  const monthStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+
+  const [daily, weekly, monthly] = await Promise.allSettled([
+    fetch(`${DATA_BASE}/daily/${dateStr}.json`).then(r => r.ok ? r.json() : null),
+    fetch(`${DATA_BASE}/weekly/${isoWeek}.json`).then(r => r.ok ? r.json() : null),
+    fetch(`${DATA_BASE}/monthly/${monthStr}.json`).then(r => r.ok ? r.json() : null),
+  ]);
+
+  if (daily.status === 'fulfilled' && daily.value && daily.value.topics && daily.value.topics.length) {
+    realDailyData = daily.value.topics;
+    liveDataActive = true;
+    const ts = daily.value.updated_at ? daily.value.updated_at.slice(0, 16).replace('T', ' ') : dateStr;
+    document.getElementById('lastUpdate').textContent = `UPDATED ${ts}`;
+  }
+  if (weekly.status === 'fulfilled' && weekly.value && weekly.value.topics && weekly.value.topics.length) {
+    realWeeklyData = weekly.value.topics;
+    liveDataActive = true;
+  }
+  if (monthly.status === 'fulfilled' && monthly.value && monthly.value.topics && monthly.value.topics.length) {
+    realMonthlyData = monthly.value.topics;
+    liveDataActive = true;
+  }
+
+  if (liveDataActive) {
+    console.log('JSON data loaded, switching to live data');
+    try { document.querySelector('.footer-right').textContent = 'LIVE DATA ACTIVE'; } catch(_){}
   }
 }
 
-async function loadLiveData() {
-  // 检测后端是否可用
-  try {
-    const status = await fetchFromAPI(`${API_BASE}/status`);
-    if (!status || status.status !== 'running') return;
-    useBackend = true;
-    console.log('后端 API 已连接，切换到实时数据');
-    document.querySelector('.footer-right').textContent = 'LIVE API CONNECTED';
-  } catch {
-    return;
-  }
-}
-
-async function fetchTabData() {
-  if (!useBackend) return null;
-  const endpoint = currentTab === 'daily' ? `${API_BASE}/topics/daily`
-    : currentTab === 'weekly' ? `${API_BASE}/topics/weekly`
-    : `${API_BASE}/topics/monthly`;
-  const params = {};
-  if (currentSource !== 'all') params.source = currentSource;
-  if (currentSearch) params.keyword = currentSearch;
-  params.sort = currentSort;
-  const data = await fetchFromAPI(endpoint, params);
-  if (data && data.topics) {
-    // 更新时间戳
-    if (data.updated_at) {
-      document.getElementById('lastUpdate').textContent = `UPDATED ${data.updated_at.slice(0, 16).replace('T', ' ')}`;
-    }
-    return data.topics;
-  }
-  return null;
-}
-
-// 覆写 renderTopics 以支持后端数据
-const _originalRenderTopics = renderTopics;
-renderTopics = async function () {
-  if (useBackend) {
-    const liveData = await fetchTabData();
-    if (liveData) {
-      // 临时替换 getData 返回值
-      const grid = document.getElementById('topicsGrid');
-      const data = liveData;
-      document.getElementById('statTotal').textContent = data.length;
-
-      if (data.length === 0) {
-        grid.innerHTML = `<div class="empty-state" style="background:var(--bg-card);padding:60px;">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <p>暂无匹配的财税热点</p></div>`;
-        return;
-      }
-
-      // 存储以供 modal 和 copy 使用
-      window._liveData = data;
-      grid.innerHTML = data.map((item, idx) => {
-        const rankClass = idx === 0 ? 'top-1' : idx === 1 ? 'top-2' : idx === 2 ? 'top-3' : '';
-        return `
-        <div class="topic-card" onclick="openLiveDetail(${idx})">
-          <div class="topic-rank ${rankClass}">${String(idx + 1).padStart(2, '0')}</div>
-          <div class="topic-body">
-            <div class="topic-header">
-              <div class="topic-title">${item.title}</div>
-              ${item.is_hot ? '<span class="hot-tag">爆</span>' : ''}
-            </div>
-            <div class="topic-summary">${item.summary}</div>
-            <div class="topic-meta">
-              <span class="meta-tag"><span class="platform-dot ${item.platform_class || ''}"></span>${item.source}</span>
-              <span class="meta-tag">${item.author || ''}</span>
-              <span class="meta-tag">${item.time}</span>
-              <span class="meta-tag">讨论 ${item.discussions || '—'}</span>
-              ${(item.tags || []).map(t => `<span class="meta-tag" style="color:var(--accent-dim);">#${t}</span>`).join('')}
-            </div>
-          </div>
-          <div class="topic-actions">
-            <div class="heat-index">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 23c-4.97 0-9-3.58-9-8 0-3.19 2.13-6.12 3.5-7.5.61-.61 1.5-.18 1.5.7v1.3c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V2.5c0-.83.67-1.5 1.5-1.5.38 0 .74.14 1.02.39C17.29 4.82 21 9.2 21 15c0 4.42-4.03 8-9 8z"/></svg>
-              ${formatHeat(item.heat)}
-            </div>
-            <div class="action-btns">
-              <button class="action-btn" onclick="event.stopPropagation();copyLiveItem(${idx}, this)">复制</button>
-              <button class="action-btn" onclick="event.stopPropagation();openLiveDetail(${idx})">详情</button>
-            </div>
-          </div>
-        </div>`;
-      }).join('');
-      return;
-    }
-  }
-  _originalRenderTopics();
+// Override getData to prefer real data, fall back to mock
+const _origGetData = getData;
+getData = function() {
+  if (currentTab === 'daily' && realDailyData) return realDailyData;
+  if (currentTab === 'weekly' && realWeeklyData) return realWeeklyData;
+  if (currentTab === 'monthly' && realMonthlyData) return realMonthlyData;
+  return _origGetData();
 };
-
-function openLiveDetail(idx) {
-  const item = window._liveData[idx];
-  if (!item) return;
-  document.getElementById('modalTitle').textContent = item.title;
-  document.getElementById('modalMeta').innerHTML = `
-    <span class="modal-meta-item"><span class="platform-dot ${item.platform_class || ''}"></span>${item.source}</span>
-    <span class="modal-meta-item">${item.author || ''}</span>
-    <span class="modal-meta-item">${item.time}</span>
-    <span class="modal-meta-item" style="color:var(--red-hot);">热度 ${formatHeat(item.heat)}</span>
-    <span class="modal-meta-item">讨论 ${item.discussions || '—'}</span>
-  `;
-  document.getElementById('modalBody').innerHTML = item.detail || `<p>${item.summary}</p>`;
-  document.getElementById('modalOverlay').classList.add('show');
-}
-
-function copyLiveItem(idx, btnEl) {
-  const item = window._liveData[idx];
-  if (!item) return;
-  const text = `【${item.title}】\n${item.summary}\n来源：${item.source} | ${item.time} | 热度：${item.heat}\n${item.url ? '链接：' + item.url + '\n' : ''}标签：${(item.tags || []).map(t => '#' + t).join(' ')}`;
-  navigator.clipboard.writeText(text).then(() => {
-    if (btnEl) {
-      btnEl.classList.add('copied');
-      btnEl.textContent = '已复制';
-      setTimeout(() => { btnEl.classList.remove('copied'); btnEl.textContent = '复制'; }, 1500);
-    }
-    showToast();
-  });
-}
 
 // === INIT ===
 updateTimestamp();
-loadLiveData().then(() => renderTopics());
+loadJSONData().then(() => renderTopics());
 </script>
 </body>
 </html>
