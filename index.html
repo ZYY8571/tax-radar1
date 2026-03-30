@@ -1209,35 +1209,39 @@ function getISOWeek(d) {
 }
 
 async function loadJSONData() {
-  const today = new Date();
-  const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-  const isoWeek = getISOWeek(today);
-  const monthStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+  try {
+    const today = new Date();
+    const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+    const isoWeek = getISOWeek(today);
+    const monthStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
 
-  const [daily, weekly, monthly] = await Promise.allSettled([
-    fetch(`${DATA_BASE}/daily/${dateStr}.json`).then(r => r.ok ? r.json() : null),
-    fetch(`${DATA_BASE}/weekly/${isoWeek}.json`).then(r => r.ok ? r.json() : null),
-    fetch(`${DATA_BASE}/monthly/${monthStr}.json`).then(r => r.ok ? r.json() : null),
-  ]);
+    const [daily, weekly, monthly] = await Promise.allSettled([
+      fetch(`${DATA_BASE}/daily/${dateStr}.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`${DATA_BASE}/weekly/${isoWeek}.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch(`${DATA_BASE}/monthly/${monthStr}.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+    ]);
 
-  if (daily.status === 'fulfilled' && daily.value && daily.value.topics && daily.value.topics.length) {
-    realDailyData = daily.value.topics;
-    liveDataActive = true;
-    const ts = daily.value.updated_at ? daily.value.updated_at.slice(0, 16).replace('T', ' ') : dateStr;
-    document.getElementById('lastUpdate').textContent = `UPDATED ${ts}`;
-  }
-  if (weekly.status === 'fulfilled' && weekly.value && weekly.value.topics && weekly.value.topics.length) {
-    realWeeklyData = weekly.value.topics;
-    liveDataActive = true;
-  }
-  if (monthly.status === 'fulfilled' && monthly.value && monthly.value.topics && monthly.value.topics.length) {
-    realMonthlyData = monthly.value.topics;
-    liveDataActive = true;
-  }
+    if (daily.status === 'fulfilled' && daily.value && daily.value.topics && daily.value.topics.length) {
+      realDailyData = daily.value.topics;
+      liveDataActive = true;
+      const ts = daily.value.updated_at ? daily.value.updated_at.slice(0, 16).replace('T', ' ') : dateStr;
+      document.getElementById('lastUpdate').textContent = `UPDATED ${ts}`;
+    }
+    if (weekly.status === 'fulfilled' && weekly.value && weekly.value.topics && weekly.value.topics.length) {
+      realWeeklyData = weekly.value.topics;
+      liveDataActive = true;
+    }
+    if (monthly.status === 'fulfilled' && monthly.value && monthly.value.topics && monthly.value.topics.length) {
+      realMonthlyData = monthly.value.topics;
+      liveDataActive = true;
+    }
 
-  if (liveDataActive) {
-    console.log('JSON data loaded, switching to live data');
-    try { document.querySelector('.footer-right').textContent = 'LIVE DATA ACTIVE'; } catch(_){}
+    if (liveDataActive) {
+      console.log('JSON data loaded, switching to live data');
+      try { document.querySelector('.footer-right').textContent = 'LIVE DATA ACTIVE'; } catch(_){}
+    }
+  } catch(e) {
+    console.warn('loadJSONData failed:', e);
   }
 }
 
@@ -1252,7 +1256,7 @@ getData = function() {
 
 // === INIT ===
 updateTimestamp();
-loadJSONData().then(() => renderTopics());
+loadJSONData().catch(() => {}).finally(() => renderTopics());
 </script>
 </body>
 </html>
