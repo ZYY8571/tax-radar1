@@ -673,6 +673,10 @@ body::before {
       <button class="tab-btn active" data-tab="daily" onclick="switchTab('daily')">每日热点<span class="tab-count">15</span></button>
       <button class="tab-btn" data-tab="weekly" onclick="switchTab('weekly')">每周汇总<span class="tab-count">TOP20</span></button>
       <button class="tab-btn" data-tab="monthly" onclick="switchTab('monthly')">每月汇总<span class="tab-count">TOP30</span></button>
+      <button class="tab-btn" data-tab="crs" onclick="switchTab('crs')">CRS热点<span class="tab-count">10</span></button>
+      <button class="tab-btn" data-tab="odi" onclick="switchTab('odi')">ODI热点<span class="tab-count">10</span></button>
+      <button class="tab-btn" data-tab="overseas_asset" onclick="switchTab('overseas_asset')">海外资产<span class="tab-count">10</span></button>
+      <button class="tab-btn" data-tab="overseas_company" onclick="switchTab('overseas_company')">海外公司注册<span class="tab-count">10</span></button>
     </div>
     <div class="controls">
       <div class="search-box">
@@ -750,6 +754,51 @@ body::before {
       <span class="trend-tag">地方财政</span>
       <span class="trend-tag">税收营商环境</span>
       <span class="trend-tag">数电发票</span>
+    </div>
+  </div>
+
+  <div class="summary-banner" id="crsBanner">
+    <h3>🌐 CRS热点总览 — 全球税务信息交换动态</h3>
+    <p>CRS（共同申报准则）持续推进全球税务透明化，各国加强跨境账户信息交换力度。中国已与超过100个国家和地区建立自动交换关系，涉税信息申报合规成为高净值人群重点关注议题。</p>
+    <div class="trend-tags">
+      <span class="trend-tag">CRS申报</span>
+      <span class="trend-tag">信息交换</span>
+      <span class="trend-tag">海外账户</span>
+      <span class="trend-tag">税务透明</span>
+      <span class="trend-tag">合规申报</span>
+    </div>
+  </div>
+  <div class="summary-banner" id="odiBanner">
+    <h3>🏢 ODI热点总览 — 境外直接投资动态</h3>
+    <p>2026年中国企业境外直接投资（ODI）政策持续优化，发改委、商务部联合出台新规简化审批流程。重点关注ODI备案新政、37号文登记、返程投资架构及跨境资金合规等议题。</p>
+    <div class="trend-tags">
+      <span class="trend-tag">ODI备案</span>
+      <span class="trend-tag">37号文</span>
+      <span class="trend-tag">跨境投资</span>
+      <span class="trend-tag">返程投资</span>
+      <span class="trend-tag">外汇合规</span>
+    </div>
+  </div>
+  <div class="summary-banner" id="overseasAssetBanner">
+    <h3>💰 海外资产热点总览 — 全球资产配置与税务合规</h3>
+    <p>随着CRS信息交换网络扩展和各国反避税力度加大，海外资产申报、合规持有和税务规划成为热点。重点涵盖海外房产、海外信托、海外保险、加密资产等资产类别的税务处理问题。</p>
+    <div class="trend-tags">
+      <span class="trend-tag">海外房产</span>
+      <span class="trend-tag">海外信托</span>
+      <span class="trend-tag">海外保险</span>
+      <span class="trend-tag">资产申报</span>
+      <span class="trend-tag">加密资产</span>
+    </div>
+  </div>
+  <div class="summary-banner" id="overseasCompanyBanner">
+    <h3>🌍 海外公司注册热点总览 — 离岸架构与跨境经营</h3>
+    <p>海外公司注册及离岸架构搭建持续受到关注，香港、新加坡、BVI、开曼等热门注册地政策频繁调整。经济实质法、受益所有人披露等合规要求日趋严格，架构规划需兼顾税务效率与合规成本。</p>
+    <div class="trend-tags">
+      <span class="trend-tag">香港公司</span>
+      <span class="trend-tag">新加坡公司</span>
+      <span class="trend-tag">BVI公司</span>
+      <span class="trend-tag">经济实质</span>
+      <span class="trend-tag">离岸架构</span>
     </div>
   </div>
 
@@ -994,6 +1043,58 @@ const MONTHLY_DATA = [
   { title: "财税知识付费市场爆发：机遇与乱象并存", summary: "头部财税博主收入曝光引发行业讨论，内容质量参差不齐问题引起监管关注。", source: "抖音", platform_class: "platform-douyin", author: "综合多平台", time: "2026年3月", heat: 5800, discussions: "380万", tags: ["知识付费", "自媒体", "行业生态"], detail: "财税自媒体行业生态引发关注。" }
 ];
 
+const CRS_DATA = [
+  { title: "2026年CRS新一轮信息交换启动：中国与115个国家实现自动交换", summary: "国家税务总局宣布2026年度CRS信息交换工作正式启动，交换伙伴国扩展至115个，涵盖主要离岸金融中心，高净值人群海外账户信息将更加透明。", detail: "2026年CRS信息交换网络进一步扩展，标志着全球税务透明化进入新阶段。\n\n<h4>核心脚本要点</h4>\n<ul><li>交换伙伴国从2025年的105个增至115个，新增土耳其、肯尼亚等国</li><li>金融账户信息采集范围扩大，首次纳入数字支付账户</li><li>申报门槛调整：个人低价值账户起点降至25万美元</li><li>交换频率提升：部分重点国家实现半年度交换</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>政策解读：新一轮交换对高净值人群的实质影响</li><li>合规指南：如何正确完成CRS自我声明表填报</li><li>风险预警：未如实申报可能面临的法律后果</li></ul>", source: "微信公众号", platform_class: "platform-weixin", author: "国际税务观察", time: "2026-03-30 09:15", heat: 9200, discussions: "45.8万", tags: ["CRS", "信息交换", "合规"], isHot: true },
+  { title: "多国加入CRS框架：全球\u201c避税天堂\u201d加速消亡", summary: "OECD最新报告显示，已有超过120个司法管辖区承诺实施CRS，传统避税天堂纷纷加强信息透明度，离岸隐匿资产的空间持续收窄。", detail: "全球税务透明化浪潮不可逆转，传统避税模式面临根本性挑战。\n\n<h4>核心脚本要点</h4>\n<ul><li>巴拿马、瓦努阿图等此前未加入CRS的地区宣布2026年底前实施</li><li>EU对不合作税务管辖区的\u201c黑名单\u201d制度持续施压</li><li>OECD推出CRS 2.0版本，引入加密资产报告框架（CARF）</li><li>壳公司和名义持有人穿透规则大幅强化</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>趋势分析：全球避税天堂的转型方向</li><li>案例分析：某离岸架构因CRS信息交换被查处的典型案例</li><li>策略建议：在全透明时代如何合法进行税务规划</li></ul>", source: "知乎", platform_class: "platform-zhihu", author: "全球税务瞭望", time: "2026-03-30 10:30", heat: 8800, discussions: "38.2万", tags: ["CRS", "避税天堂", "OECD"], isHot: true },
+  { title: "高净值人群CRS合规风暴：三类人群需特别关注", summary: "税务机关利用CRS交换数据开展精准稽查，拥有海外金融账户、海外保单、海外信托的高净值人群成为重点关注对象。", detail: "CRS数据的深度应用让海外资产无所遁形。\n\n<h4>核心脚本要点</h4>\n<ul><li>第一类：持有海外银行存款和投资账户的个人</li><li>第二类：购买大额海外保单（尤其是香港保单）的投保人</li><li>第三类：设立海外信托或家族基金会的委托人和受益人</li><li>税务机关已建立CRS数据智能分析系统，异常账户自动预警</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>人群画像：哪些人群最容易被CRS数据锁定</li><li>自查清单：高净值人群CRS合规自检10项要点</li><li>补救方案：历史未申报问题的合规补救路径</li></ul>", source: "微博", platform_class: "platform-weibo", author: "财富管理前沿", time: "2026-03-30 11:45", heat: 8500, discussions: "32.6万", tags: ["高净值", "合规", "稽查"], isHot: true },
+  { title: "银行CRS尽职调查升级：账户持有人需配合提供哪些信息", summary: "多家银行发布公告，要求存量客户更新CRS自我声明信息，未按时提供者可能面临账户功能受限。合规填报指南引发广泛关注。", detail: "银行端CRS尽职调查力度显著加强。\n\n<h4>核心脚本要点</h4>\n<ul><li>六大行同步启动2026年度存量账户信息更新工作</li><li>新增要求：需提供所有税收居民身份国的纳税人识别号</li><li>消极非金融机构穿透识别规则更加严格</li><li>配合时限：通常为收到通知后30个自然日内</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>实操指引：手把手教你填写CRS自我声明表</li><li>常见误区：双重税收居民身份的判定标准</li><li>后果分析：拒绝配合尽职调查的账户处理措施</li></ul>", source: "小红书", platform_class: "platform-xiaohongshu", author: "银行合规小课堂", time: "2026-03-30 13:20", heat: 7600, discussions: "28.1万", tags: ["银行", "尽职调查", "声明"], isHot: false },
+  { title: "CRS与FATCA对比解析：两大国际税务信息交换体系有何不同", summary: "不少纳税人对CRS和美国FATCA制度混淆不清。专业解析两大体系的适用范围、申报义务和合规要求的核心差异。", detail: "理解CRS和FATCA的区别对于跨境税务合规至关重要。\n\n<h4>核心脚本要点</h4>\n<ul><li>CRS：OECD主导，多边交换，覆盖120+国家和地区</li><li>FATCA：美国主导，双边交换，针对美国纳税人全球账户</li><li>关键区别：申报门槛、账户类型、豁免规则各有不同</li><li>双重申报义务：同时拥有美国和其他国家账户的情形</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>对比图解：CRS vs FATCA一张图看懂核心差异</li><li>实务案例：持有美国和香港账户的中国税务居民如何合规</li><li>趋势展望：两大体系融合的可能性</li></ul>", source: "B站", platform_class: "platform-bilibili", author: "税务知识UP主", time: "2026-03-30 14:00", heat: 7100, discussions: "22.4万", tags: ["FATCA", "对比", "申报"], isHot: false },
+  { title: "CRS违规处罚案例频出：某企业因隐匿海外账户被追缴税款逾千万", summary: "税务稽查部门公布多起利用CRS交换信息查获的典型案例，涉及隐匿海外存款、虚假声明税收居民身份等违法行为。", detail: "CRS执法力度显著加强，违规成本急剧上升。\n\n<h4>核心脚本要点</h4>\n<ul><li>案例一：某企业主在新加坡持有账户未申报，被追缴税款及滞纳金合计1200万元</li><li>案例二：虚假填报CRS声明表，声称非中国税收居民，被认定偷税</li><li>案例三：通过代持账户规避CRS申报，关联交易链条被完整还原</li><li>处罚趋势：罚款金额和刑事追诉力度均在加大</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>案例警示：用真实案例说明违规的严重后果</li><li>合规红线：哪些行为会触发CRS违规调查</li><li>应对策略：收到税务机关CRS核查函后的正确处理方式</li></ul>", source: "微信公众号", platform_class: "platform-weixin", author: "税务稽查实务", time: "2026-03-30 15:30", heat: 6800, discussions: "19.7万", tags: ["处罚", "案例", "稽查"], isHot: false },
+  { title: "CRS对海外保险的影响：香港保单信息已实现自动交换", summary: "香港作为CRS参与方，保险公司已按规定向内地税务机关报送投保人信息。大额保单持有者需了解申报义务和税务影响。", detail: "海外保单在CRS框架下的信息交换备受关注。\n\n<h4>核心脚本要点</h4>\n<ul><li>香港保险公司需申报具有现金价值的人寿保险合同</li><li>申报内容包括：投保人信息、保单现金价值、年度给付金额</li><li>纯保障型保单（如定期寿险）通常不在CRS申报范围内</li><li>内地税务机关可据此核实个人海外资产配置情况</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>科普向：哪些类型的海外保单需要被CRS申报</li><li>影响分析：保单信息被交换后对投保人有何实质影响</li><li>规划建议：在CRS框架下如何合规配置海外保险</li></ul>", source: "抖音", platform_class: "platform-douyin", author: "保险税务通", time: "2026-03-30 16:15", heat: 6200, discussions: "17.3万", tags: ["海外保险", "香港保单", "申报"], isHot: false },
+  { title: "信托架构与CRS：离岸信托还能实现资产隔离吗", summary: "CRS要求对信托进行穿透申报，委托人、受托人、受益人和保护人信息均需披露。传统离岸信托的隐私优势大幅削弱。", detail: "CRS对信托架构的穿透要求改变了家族财富管理的底层逻辑。\n\n<h4>核心脚本要点</h4>\n<ul><li>CRS将信托视为\u201c消极非金融机构\u201d，需穿透至实际控制人</li><li>全权委托信托的所有受益人均需被报送</li><li>多层嵌套架构不能规避CRS穿透义务</li><li>信托的资产隔离和传承功能仍然有效，但隐私保护功能弱化</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>深度解析：CRS下信托的四类被报送人</li><li>架构比较：不同类型信托在CRS下的申报差异</li><li>转型方向：后CRS时代的家族信托规划新思路</li></ul>", source: "知乎", platform_class: "platform-zhihu", author: "家族办公室研究", time: "2026-03-30 17:00", heat: 5800, discussions: "14.6万", tags: ["信托", "穿透", "家族财富"], isHot: false },
+  { title: "加密资产纳入CRS报告框架：CARF规则2026年落地进展", summary: "OECD推出的加密资产报告框架（CARF）进入实施阶段，多国承诺2026年起对加密资产交易实施自动信息交换。", detail: "加密资产的税务监管进入全球协作新纪元。\n\n<h4>核心脚本要点</h4>\n<ul><li>CARF要求加密资产服务提供商报告用户交易信息</li><li>覆盖范围：加密货币、稳定币、NFT及部分DeFi产品</li><li>首批实施国家包括英国、德国、新加坡等48个司法管辖区</li><li>中国正在研究CARF的国内立法转化方案</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>前沿解读：CARF与CRS的协同运作机制</li><li>影响评估：中国加密资产持有者面临的新合规要求</li><li>应对准备：加密资产持有者的税务合规准备清单</li></ul>", source: "微信视频号", platform_class: "platform-shipinhao", author: "数字资产税务", time: "2026-03-30 18:30", heat: 5300, discussions: "12.8万", tags: ["加密资产", "CARF", "数字货币"], isHot: false },
+  { title: "CRS豁免与低门槛账户：哪些金融账户不需要被交换", summary: "并非所有金融账户都在CRS交换范围内，了解豁免规则和低风险账户排除条款有助于准确评估自身合规义务。", detail: "CRS存在若干豁免和排除规则，需要准确理解适用条件。\n\n<h4>核心脚本要点</h4>\n<ul><li>退休金账户和养老金计划通常可获得豁免</li><li>低价值免申报账户：个人账户余额低于一定门槛可暂缓申报</li><li>政府机构、国际组织、央行等特定实体账户豁免</li><li>托管账户中的已上市证券需申报，但特定公募基金可能豁免</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>清单整理：CRS豁免账户类型完整清单</li><li>误区纠正：常见的CRS豁免误解及正确理解</li><li>实务操作：如何判断自己的账户是否在CRS交换范围内</li></ul>", source: "微博", platform_class: "platform-weibo", author: "税法普及站", time: "2026-03-30 19:45", heat: 4500, discussions: "9.2万", tags: ["豁免", "门槛", "排除"], isHot: false }
+];
+
+const ODI_DATA = [
+  { title: "2026年ODI备案新规解读：发改委商务部联合简化审批流程", summary: "发改委与商务部联合发布境外投资管理新规，大幅简化ODI备案流程，缩短审批周期至15个工作日，鼓励企业合规\u201c走出去\u201d。", detail: "ODI备案制度迎来重大改革，企业境外投资更加便利。\n\n<h4>核心脚本要点</h4>\n<ul><li>备案流程简化：一般项目实行\u201c一窗受理、并行审批\u201d</li><li>审批周期压缩：从原来的30个工作日缩短至15个</li><li>材料精简：取消5项冗余证明材料，推行电子化申报</li><li>敏感行业清单更新：新增AI和半导体行业相关限制</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>政策对比：新旧规定的核心差异一览</li><li>实操指南：2026年ODI备案全流程操作手册</li><li>风险提示：哪些投资项目仍需核准而非备案</li></ul>", source: "微信公众号", platform_class: "platform-weixin", author: "跨境投资研究院", time: "2026-03-30 08:30", heat: 9100, discussions: "42.3万", tags: ["ODI备案", "新规", "审批"], isHot: true },
+  { title: "37号文登记全流程解析：返程投资的合规桥梁", summary: "外管局37号文（特殊目的公司外汇登记）是返程投资架构的核心合规环节。2026年新增线上办理通道，但审核标准同步趋严。", detail: "37号文登记是跨境投资架构合规的关键一环。\n\n<h4>核心脚本要点</h4>\n<ul><li>37号文适用场景：境内居民通过境外SPV返程投资境内企业</li><li>新增线上申报通道：通过国家外汇管理局数字化平台办理</li><li>审核要点加强：资金来源真实性、投资目的合理性审查加严</li><li>变更登记要求：SPV架构调整需在30日内办理变更</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>全景解析：37号文登记从申请到获批的完整流程</li><li>材料清单：一次通过的申请材料准备技巧</li><li>常见问题：被退回补充材料的TOP5原因</li></ul>", source: "知乎", platform_class: "platform-zhihu", author: "外汇合规实务", time: "2026-03-30 09:45", heat: 8700, discussions: "36.5万", tags: ["37号文", "外汇登记", "返程投资"], isHot: true },
+  { title: "返程投资架构搭建实务：VIE、红筹与直接持股模式对比", summary: "企业境外上市或融资常用的返程投资架构面临合规压力，VIE架构监管新动向备受关注，红筹架构重新获得青睐。", detail: "返程投资架构选择直接影响企业海外融资和税务效率。\n\n<h4>核心脚本要点</h4>\n<ul><li>VIE架构：协议控制模式面临证监会备案新规约束</li><li>红筹架构：37号文+ODI备案双通道，合规确定性高</li><li>直接持股：结构简单但受外商投资负面清单限制</li><li>税务考量：不同架构下的股息、资本利得税负差异显著</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>架构对比：三种模式的优劣势全方位评估</li><li>选择指南：不同行业企业的最优架构推荐</li><li>合规路径：已有VIE架构的企业如何进行合规调整</li></ul>", source: "微博", platform_class: "platform-weibo", author: "跨境架构师", time: "2026-03-30 11:00", heat: 8300, discussions: "31.7万", tags: ["VIE", "红筹", "架构"], isHot: true },
+  { title: "ODI+VIE双轨架构的合规风险与应对策略", summary: "部分企业同时采用ODI备案和VIE协议控制的混合架构，在当前监管环境下面临合规审查升级。专业人士建议尽早进行架构梳理。", detail: "混合架构的合规风险需要系统性评估和应对。\n\n<h4>核心脚本要点</h4>\n<ul><li>ODI+VIE混合架构的典型应用场景</li><li>证监会境外上市备案制对VIE架构的影响</li><li>外汇管理局对ODI通道的穿透式监管趋势</li><li>架构清理建议：分步骤实现合规化转型</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>风险清单：混合架构面临的五大合规风险点</li><li>案例分析：某科技企业架构重组的实操经验</li><li>专家建议：不同阶段企业的架构优化方案</li></ul>", source: "微信公众号", platform_class: "platform-weixin", author: "资本市场法律观察", time: "2026-03-30 13:30", heat: 7500, discussions: "25.8万", tags: ["VIE", "合规", "架构重组"], isHot: false },
+  { title: "跨境资金出境合规：ODI项下资金汇出的实务操作要点", summary: "ODI备案完成后，资金的实际汇出仍需满足外汇管理要求。银行端审查日趋严格，了解操作细节可避免资金出境受阻。", detail: "资金汇出是ODI项目落地的\u201c最后一公里\u201d。\n\n<h4>核心脚本要点</h4>\n<ul><li>资金汇出前置条件：ODI备案证书+外汇登记缺一不可</li><li>银行审查重点：资金来源证明、投资计划书、利润预测</li><li>分期汇出规则：首次汇出比例和后续汇款时间要求</li><li>常见卡点：银行合规部门的补充材料要求</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>流程图解：从备案到资金落地的全链路操作指南</li><li>银行选择：各银行ODI资金汇出服务对比</li><li>避坑指南：资金汇出被退回的常见原因及解决方案</li></ul>", source: "抖音", platform_class: "platform-douyin", author: "外汇实操指南", time: "2026-03-30 14:15", heat: 6900, discussions: "20.4万", tags: ["资金出境", "外汇", "汇款"], isHot: false },
+  { title: "科技企业出海ODI攻略：从备案到运营的全链条解析", summary: "越来越多中国科技企业通过ODI在东南亚、中东等地区设立研发中心或运营实体，ODI备案的行业特殊要求需要提前规划。", detail: "科技企业出海浪潮推动ODI需求快速增长。\n\n<h4>核心脚本要点</h4>\n<ul><li>科技企业ODI热门目的地：新加坡、日本、沙特、阿联酋</li><li>技术出口管制与ODI备案的协调：涉及限制类技术需额外审批</li><li>研发中心设立：知识产权归属和转让定价安排</li><li>数据合规：跨境数据传输与当地数据保护法衔接</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>行业洞察：科技企业出海的主流目的地选择逻辑</li><li>合规清单：科技企业ODI需要额外关注的合规事项</li><li>成功案例：某SaaS企业东南亚布局的ODI实操分享</li></ul>", source: "B站", platform_class: "platform-bilibili", author: "出海创业家", time: "2026-03-30 15:00", heat: 6400, discussions: "18.6万", tags: ["科技出海", "研发中心", "东南亚"], isHot: false },
+  { title: "ODI审批流程加速：在线办理系统升级与审批时效提升", summary: "商务部\u201c境外投资管理系统\u201d完成升级，实现全流程线上办理。部分自贸区试行\u201c即报即批\u201d模式，ODI审批效率大幅提升。", detail: "数字化改革推动ODI审批提速增效。\n\n<h4>核心脚本要点</h4>\n<ul><li>系统升级：新增智能预审功能，提前识别材料问题</li><li>自贸区创新：上海、海南自贸区试行3个工作日快速审批</li><li>电子证照：ODI备案证书实现电子化，银行可在线核验</li><li>进度查询：申请人可实时查看审批进度和反馈意见</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>系统教程：新版境外投资管理系统操作全流程演示</li><li>区域对比：不同地区ODI审批效率横向比较</li><li>经验分享：如何利用自贸区政策红利加速ODI办理</li></ul>", source: "微信视频号", platform_class: "platform-shipinhao", author: "政策快报", time: "2026-03-30 16:30", heat: 5800, discussions: "15.2万", tags: ["审批提速", "线上办理", "自贸区"], isHot: false },
+  { title: "ODI被驳回的八大常见原因及应对方案", summary: "统计显示约25%的ODI备案申请首次提交被退回补正，了解常见驳回原因可有效提高一次通过率。", detail: "提前规避常见问题可大幅提高ODI备案成功率。\n\n<h4>核心脚本要点</h4>\n<ul><li>原因一：投资资金来源说明不充分或存疑</li><li>原因二：可行性研究报告内容过于简单</li><li>原因三：境外投资目的与主营业务关联度不足</li><li>原因四：股权架构复杂且未做充分说明</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>避坑指南：逐一拆解八大驳回原因的应对策略</li><li>模板分享：高通过率的可行性研究报告模板要点</li><li>专家提醒：哪些情况建议聘请专业机构协助办理</li></ul>", source: "小红书", platform_class: "platform-xiaohongshu", author: "ODI办理助手", time: "2026-03-30 17:45", heat: 5200, discussions: "13.1万", tags: ["驳回", "避坑", "备案技巧"], isHot: false },
+  { title: "ODI税务影响全解析：境外投资的税负成本不容忽视", summary: "ODI项目涉及企业所得税、预提税、转让定价等多层次税务问题，合理的税务架构设计可显著降低整体税负。", detail: "ODI的税务规划需要从架构设计阶段就开始介入。\n\n<h4>核心脚本要点</h4>\n<ul><li>股息汇回：境外子公司分红的预提税和抵免安排</li><li>转让定价：关联交易定价需符合独立交易原则</li><li>税收协定利用：选择合适的中间控股平台降低税负</li><li>受控外国企业规则：CFC规则下的反避税考量</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>税负测算：不同架构下ODI项目的综合税负对比</li><li>协定网络：中国签订的税收协定中最优惠的条款梳理</li><li>案例分析：某制造业企业ODI税务架构优化实例</li></ul>", source: "知乎", platform_class: "platform-zhihu", author: "国际税务师事务所", time: "2026-03-30 18:30", heat: 4800, discussions: "11.5万", tags: ["税务", "转让定价", "税收协定"], isHot: false },
+  { title: "一带一路沿线ODI新动向：中东和非洲成投资新热土", summary: "2026年一季度中国对一带一路沿线国家ODI同比增长28%，中东和非洲地区增速尤为突出，基建、新能源和数字经济成为主要投资领域。", detail: "一带一路倡议持续深化为ODI创造新机遇。\n\n<h4>核心脚本要点</h4>\n<ul><li>中东热点：沙特NEOM新城项目吸引大量中国企业参与</li><li>非洲机遇：肯尼亚、埃塞俄比亚数字基建需求旺盛</li><li>投资领域：新能源（光伏、风电）、数字基建、物流仓储</li><li>风险提示：政治风险、汇兑限制、法律体系差异需关注</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>热点地图：2026年最具ODI潜力的一带一路国家</li><li>行业分析：各投资领域的机遇与风险评估</li><li>实操经验：在一带一路国家落地ODI的经验和教训</li></ul>", source: "微博", platform_class: "platform-weibo", author: "一带一路投资周刊", time: "2026-03-30 19:15", heat: 4200, discussions: "9.8万", tags: ["一带一路", "中东", "非洲"], isHot: false }
+];
+
+const OVERSEAS_ASSET_DATA = [
+  { title: "海外房产税务申报全指南：中国税务居民持有境外房产的纳税义务", summary: "随着CRS信息交换和各国不动产登记信息共享推进，中国税务居民持有的海外房产面临更严格的税务申报要求。租金收入和处置收益均需在国内申报。", detail: "海外房产的税务合规已成为不可忽视的议题。\n\n<h4>核心脚本要点</h4>\n<ul><li>持有环节：海外房产租金收入需在中国申报个人所得税</li><li>处置环节：出售海外房产的资本利得需缴纳个税</li><li>抵免机制：在境外已缴纳的房产相关税收可申请抵免</li><li>申报时点：年度汇算清缴时统一办理境外所得申报</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>国别指南：美国、澳大利亚、日本等热门购房国的税务处理</li><li>计算实例：海外房产租金收入的个税计算步骤演示</li><li>常见遗漏：容易被忽略的海外房产税务申报事项</li></ul>", source: "微信公众号", platform_class: "platform-weixin", author: "海外置业税务通", time: "2026-03-30 08:45", heat: 9400, discussions: "48.2万", tags: ["海外房产", "税务申报", "个税"], isHot: true },
+  { title: "海外信托的中国税务处理：委托人、受益人各有哪些纳税义务", summary: "设立海外信托的中国高净值人群持续增加，但信托收益的税务处理规则复杂，委托人和受益人面临不同的纳税义务和申报要求。", detail: "海外信托税务问题的复杂性远超多数人想象。\n\n<h4>核心脚本要点</h4>\n<ul><li>委托人课税规则：不可撤销信托vs可撤销信托的税务差异</li><li>受益人课税规则：信托分配收益的性质认定和适用税率</li><li>反避税条款：个人所得税法中针对信托的反避税规则</li><li>CRS穿透：信托在CRS下的信息报送与税务稽查联动</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>架构对比：不同类型信托的税务处理差异</li><li>合规路径：已设立海外信托的税务合规补救方案</li><li>规划建议：在当前税务环境下设立海外信托的注意事项</li></ul>", source: "知乎", platform_class: "platform-zhihu", author: "家族财富规划师", time: "2026-03-30 09:30", heat: 8900, discussions: "41.5万", tags: ["海外信托", "委托人", "受益人"], isHot: true },
+  { title: "香港保单税务全解析：投保、持有、理赔各环节税务影响", summary: "赴港投保持续火热，但多数投保人对香港保单在内地的税务影响了解不足。保单分红、退保收益和身故理赔金的税务处理各有不同。", detail: "香港保单的税务问题随着CRS信息交换而日益受到关注。\n\n<h4>核心脚本要点</h4>\n<ul><li>保单分红：储蓄分红险的年度红利是否需要缴纳个税存在争议</li><li>退保收益：退保所得超过已缴保费部分可能被视为应税所得</li><li>身故理赔：目前个人所得税法对保险赔款免税，但适用条件需关注</li><li>CRS申报：具有现金价值的香港保单信息已自动交换至内地</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>分类解析：不同类型香港保单的税务处理差异</li><li>风险提示：大额保单持有人需要关注的税务风险</li><li>投保建议：税务视角下香港保单的配置策略</li></ul>", source: "小红书", platform_class: "platform-xiaohongshu", author: "港险通", time: "2026-03-30 10:45", heat: 8500, discussions: "37.8万", tags: ["香港保险", "保单分红", "CRS"], isHot: true },
+  { title: "加密资产全球税务趋势：各国如何对比特币和数字货币征税", summary: "全球主要经济体纷纷出台加密资产税收政策，中国虽禁止加密货币交易但持有者仍面临潜在税务义务，了解全球趋势至关重要。", detail: "加密资产税务监管正在全球范围内快速成型。\n\n<h4>核心脚本要点</h4>\n<ul><li>美国：加密资产交易视为资本利得，IRS加强执法力度</li><li>新加坡：个人持有加密资产的资本利得免税，但交易频繁者可能被视为经营所得</li><li>日本：加密货币收益按\u201c杂所得\u201d课税，最高税率达55%</li><li>中国：虽无明确加密资产税收规定，但境外所得申报义务依然适用</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>全球对比：主要国家加密资产税率和规则对比表</li><li>合规预判：中国未来可能出台的加密资产税收政策方向</li><li>实务建议：持有加密资产的中国税务居民如何做好税务合规</li></ul>", source: "B站", platform_class: "platform-bilibili", author: "Web3税务观察", time: "2026-03-30 12:00", heat: 7800, discussions: "33.2万", tags: ["加密资产", "比特币", "全球税务"], isHot: false },
+  { title: "海外银行账户申报义务：中国税务居民需要了解的关键规则", summary: "持有海外银行账户的中国税务居民面临多重申报义务，包括个税年度申报、外汇申报以及CRS信息交换，遗漏申报可能面临严重后果。", detail: "海外银行账户的申报义务常被忽视但后果严重。\n\n<h4>核心脚本要点</h4>\n<ul><li>个税申报：海外存款利息收入需在年度汇算时申报</li><li>外汇申报：年度资产超过一定金额需向外管局申报</li><li>CRS自动交换：金融机构已向税务机关报送账户信息</li><li>处罚规定：未如实申报境外所得最高可处3倍罚款</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>义务梳理：海外银行账户涉及的三类申报义务全解</li><li>操作指南：境外所得个税申报的具体操作步骤</li><li>补报方案：历史年度未申报的补救措施和自首从轻政策</li></ul>", source: "微信公众号", platform_class: "platform-weixin", author: "跨境税务合规", time: "2026-03-30 13:15", heat: 7200, discussions: "28.9万", tags: ["海外账户", "申报", "外汇"], isHot: false },
+  { title: "海外资产继承税务问题：跨境遗产传承的税务陷阱", summary: "继承海外资产涉及多国税法交叉适用问题，遗产税、继承税、资本利得税等可能叠加征收，提前规划可有效降低传承成本。", detail: "跨境遗产传承的税务复杂性常被低估。\n\n<h4>核心脚本要点</h4>\n<ul><li>美国遗产税：非美国公民在美资产超6万美元即可能征收遗产税，税率最高40%</li><li>日本继承税：继承人为日本居民的，全球遗产均需课税</li><li>中国现状：目前暂无遗产税，但境外已缴遗产税不一定能在国内抵免</li><li>双重征税风险：不同国家对遗产课税的规则差异可能导致重复征税</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>国别解析：主要国家遗产税/继承税规则对比</li><li>案例分析：跨境遗产传承中的典型税务纠纷案例</li><li>规划建议：利用保险、信托等工具优化跨境传承税务安排</li></ul>", source: "微博", platform_class: "platform-weibo", author: "财富传承研究所", time: "2026-03-30 14:30", heat: 6800, discussions: "24.1万", tags: ["遗产税", "继承", "跨境传承"], isHot: false },
+  { title: "海外养老金和退休账户：回国后的税务处理实务", summary: "海归人群持有的海外养老金账户（如美国401K、IRA，澳洲Superannuation）回国后面临复杂的税务处理问题，取款时点和方式直接影响税负。", detail: "海外养老金的税务处理是海归群体关注的重点。\n\n<h4>核心脚本要点</h4>\n<ul><li>美国401K/IRA：提前取款面临10%罚金+所得税，回国后取款的税务居民身份认定很关键</li><li>澳洲Super：达到释放条件后取款在澳洲免税，但中国可能视为应税所得</li><li>税收协定适用：部分国家的养老金条款可提供税收减免</li><li>抵免机制：在境外已缴税款可在国内申请抵免</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>分国指南：各国养老金回国后的税务处理差异</li><li>时机选择：什么时候取款最省税</li><li>身份筹划：税务居民身份转换对养老金取款的影响</li></ul>", source: "抖音", platform_class: "platform-douyin", author: "海归财税顾问", time: "2026-03-30 15:45", heat: 6200, discussions: "20.3万", tags: ["养老金", "401K", "海归"], isHot: false },
+  { title: "海外艺术品和收藏品的税务处理：拍卖、持有与跨境运输", summary: "高净值人群在海外购买艺术品、珠宝等收藏品日益普遍，涉及关税、增值税、资本利得税等多个税种，跨境运输申报更需注意合规。", detail: "艺术品和收藏品的跨境税务问题常被忽视。\n\n<h4>核心脚本要点</h4>\n<ul><li>购买环节：海外拍卖成交价之外还需考虑当地增值税/销售税</li><li>入境申报：携带或运输艺术品入境需按规定申报并缴纳关税</li><li>出售收益：海外出售艺术品的资本利得需在国内申报个税</li><li>保税仓储：利用保税区存放可暂缓缴纳进口环节税</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>全流程梳理：海外艺术品投资的税务成本全景图</li><li>避税vs合规：常见的艺术品税务筹划手段及合规边界</li><li>收藏家提醒：哪些情况下需要主动申报海外收藏品</li></ul>", source: "微信视频号", platform_class: "platform-shipinhao", author: "艺术品税务", time: "2026-03-30 16:30", heat: 5500, discussions: "16.7万", tags: ["艺术品", "收藏品", "关税"], isHot: false },
+  { title: "海外黄金和贵金属投资的税务合规：实物金与纸黄金的区别", summary: "在全球经济不确定性下，海外黄金投资需求上升。实物黄金与金融类黄金产品的税务处理截然不同，跨境持有还涉及进出口管制。", detail: "贵金属投资的跨境税务问题需要区分对待。\n\n<h4>核心脚本要点</h4>\n<ul><li>实物黄金：携带入境有数量限制，超量需申报并缴纳关税</li><li>纸黄金/黄金ETF：交易收益按金融商品转让或资本利得课税</li><li>海外金银币：被视为收藏品而非货币，适用不同税率</li><li>增值税问题：国内销售实物黄金涉及增值税，海外购入价不含税需注意</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>产品对比：不同黄金投资渠道的税务处理差异表</li><li>入境指南：海外购买贵金属回国的申报和税务流程</li><li>投资建议：税务视角下最优的黄金投资方式</li></ul>", source: "知乎", platform_class: "platform-zhihu", author: "贵金属投资研究", time: "2026-03-30 17:45", heat: 4800, discussions: "13.5万", tags: ["黄金", "贵金属", "进出口"], isHot: false },
+  { title: "海外股票和基金持仓的税务申报：美股、港股投资者必读", summary: "中国投资者持有的海外股票和基金收益需在国内申报个税，股息预提税抵免、资本利得计算和换汇损益处理是三大核心问题。", detail: "海外证券投资的税务申报义务不容忽视。\n\n<h4>核心脚本要点</h4>\n<ul><li>股息收入：美股股息被扣10%预提税（协定税率），仍需在国内申报</li><li>资本利得：买卖海外股票的差价收益按20%税率缴纳个税</li><li>基金分红：海外基金分红的性质认定影响适用税率</li><li>汇兑损益：计算应纳税所得额时的汇率折算规则</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>计算实例：美股投资者的个税申报完整计算演示</li><li>抵免指南：境外预提税在国内抵免的操作流程</li><li>工具推荐：辅助计算海外投资税务的实用工具</li></ul>", source: "小红书", platform_class: "platform-xiaohongshu", author: "美股税务达人", time: "2026-03-30 19:00", heat: 4200, discussions: "11.8万", tags: ["美股", "港股", "股息税"], isHot: false }
+];
+
+const OVERSEAS_COMPANY_DATA = [
+  { title: "2026年香港公司注册新规与税务优势全面解析", summary: "香港作为最受中国企业家欢迎的离岸注册地，2026年公司注册规则和税务政策持续优化。两级利得税制下首200万港币利润仅需8.25%税率。", detail: "香港公司注册仍是跨境商业布局的首选。\n\n<h4>核心脚本要点</h4>\n<ul><li>注册流程：全程线上办理，最快1个工作日完成注册</li><li>税务优势：两级税制，首200万利润8.25%，超出部分16.5%</li><li>新规变化：2026年起加强\u201c实质运营\u201d要求，空壳公司面临审查</li><li>维护成本：年度审计+报税+秘书服务约2-5万港币</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>注册攻略：从零到一设立香港公司的完整步骤</li><li>税务规划：如何充分利用香港公司的税务优势</li><li>风险提示：不满足实质运营要求的后果</li></ul>", source: "微信公众号", platform_class: "platform-weixin", author: "港企服务中心", time: "2026-03-30 08:00", heat: 9300, discussions: "52.6万", tags: ["香港公司", "注册", "税务"], isHot: true },
+  { title: "新加坡公司税务优势详解：为什么越来越多企业选择星城", summary: "新加坡凭借17%的企业税率、广泛的税收协定网络和对新公司的税务减免政策，成为亚太区域总部的热门选择。2026年新增多项创业支持措施。", detail: "新加坡的营商环境持续吸引全球企业进驻。\n\n<h4>核心脚本要点</h4>\n<ul><li>税率优势：企业税率17%，新公司前三年可享受高达75%的税务减免</li><li>税收协定：已与90+国家签订避免双重征税协定</li><li>资本利得：新加坡不征收资本利得税</li><li>区域架构：作为东南亚控股平台的税务效率分析</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>成本对比：新加坡vs香港公司的综合成本比较</li><li>设立指南：远程注册新加坡公司的流程和要求</li><li>合规要点：新加坡公司的年度合规义务清单</li></ul>", source: "知乎", platform_class: "platform-zhihu", author: "新加坡商业观察", time: "2026-03-30 09:15", heat: 8800, discussions: "44.3万", tags: ["新加坡", "企业税", "区域总部"], isHot: true },
+  { title: "BVI公司2026新规：经济实质法合规要求持续升级", summary: "英属维尔京群岛（BVI）经济实质法实施进入深水区，2026年新增利润分配报告要求和实质审查频率。纯控股公司虽有简化要求但仍不能忽视。", detail: "BVI公司的合规门槛正在持续提高。\n\n<h4>核心脚本要点</h4>\n<ul><li>经济实质法更新：新增年度利润分配信息申报义务</li><li>审查频率：从抽查改为全面审查，所有相关活动公司均需提交证明</li><li>纯控股公司：仍享简化要求但需证明实际管理和控制功能</li><li>处罚升级：不合规公司罚款上限提高至20万美元并可能被注销</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>政策梳理：BVI经济实质法最新要求全面解读</li><li>合规清单：BVI公司年度经济实质合规操作指南</li><li>替代方案：如果BVI合规成本过高，有哪些替代注册地</li></ul>", source: "微信公众号", platform_class: "platform-weixin", author: "离岸架构研究", time: "2026-03-30 10:30", heat: 8200, discussions: "36.7万", tags: ["BVI", "经济实质", "合规"], isHot: true },
+  { title: "开曼群岛经济实质要求与基金架构的合规挑战", summary: "开曼群岛作为全球基金注册的首选地，经济实质法对不同类型基金实体的要求各异。GP实体、管理公司和基金载体的合规路径需分别规划。", detail: "开曼基金架构的合规要求需要精细化管理。\n\n<h4>核心脚本要点</h4>\n<ul><li>豁免有限合伙（ELP）：通常被视为投资基金，适用特定规则</li><li>GP实体：需满足基金管理相关活动的经济实质要求</li><li>注册办事处：所有开曼实体必须在当地维持注册办事处和注册代理人</li><li>年度申报：经济实质申报表需在财年结束后12个月内提交</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>架构解析：开曼基金架构各层实体的经济实质要求</li><li>合规成本：维持开曼基金合规运作的年度预算</li><li>趋势判断：开曼作为基金注册地的未来竞争力</li></ul>", source: "微博", platform_class: "platform-weibo", author: "基金合规前线", time: "2026-03-30 11:45", heat: 7500, discussions: "29.4万", tags: ["开曼", "基金", "经济实质"], isHot: false },
+  { title: "美国LLC适合中国企业家吗：税务穿透实体的机遇与陷阱", summary: "美国LLC（有限责任公司）因灵活的税务穿透特性受到关注，但中国税务居民持有美国LLC面临复杂的跨境税务问题，需谨慎评估。", detail: "美国LLC的税务穿透特性是一把双刃剑。\n\n<h4>核心脚本要点</h4>\n<ul><li>税务穿透：单一成员LLC默认为\u201c被忽略实体\u201d，收入直接归属于成员</li><li>中美冲突：美国视为穿透实体但中国可能视为独立纳税主体</li><li>ECI问题：在美有\u201c有效关联收入\u201d的非居民需申报美国联邦税</li><li>州税差异：各州对LLC的税务处理差异显著，选州很关键</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>适用分析：哪些场景下中国企业家适合注册美国LLC</li><li>税务陷阱：中国税务居民持有美国LLC的三大常见税务误区</li><li>替代比较：LLC vs C-Corp vs S-Corp的全面税务对比</li></ul>", source: "B站", platform_class: "platform-bilibili", author: "美国公司注册达人", time: "2026-03-30 13:00", heat: 7000, discussions: "25.1万", tags: ["美国LLC", "穿透实体", "跨境税务"], isHot: false },
+  { title: "英国公司注册指南：脱欧后的税务环境与中国企业机遇", summary: "英国脱欧后持续优化企业税率（2026年维持25%主税率，小利润公司19%）和营商环境，对中国企业进入欧洲市场仍具独特价值。", detail: "英国作为欧洲商业门户的地位仍然重要。\n\n<h4>核心脚本要点</h4>\n<ul><li>税率结构：利润低于5万英镑适用19%小利润税率</li><li>注册流程：Companies House线上注册，最快24小时完成</li><li>增值税：营业额超过85,000英镑需注册VAT</li><li>中英税收协定：股息、利息、特许权使用费的优惠预提税率</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>注册教程：中国企业家远程注册英国公司全流程</li><li>税务规划：英国公司作为欧洲业务平台的税务效率</li><li>对比分析：英国vs爱尔兰vs荷兰作为欧洲控股平台的优劣</li></ul>", source: "抖音", platform_class: "platform-douyin", author: "英伦商务通", time: "2026-03-30 14:30", heat: 6400, discussions: "21.8万", tags: ["英国公司", "脱欧", "欧洲市场"], isHot: false },
+  { title: "海外公司银行开户难题：2026年各银行政策与成功策略", summary: "海外公司银行账户开立难度持续加大，合规审查（KYC/AML）日趋严格。分享主流银行的开户要求和提高成功率的实用技巧。", detail: "银行开户是海外公司运营的关键瓶颈。\n\n<h4>核心脚本要点</h4>\n<ul><li>香港银行：汇丰、恒生审查趋严，虚拟银行成为替代选项</li><li>新加坡银行：要求在新有实质业务，远程开户难度增加</li><li>材料准备：商业计划书、贸易合同、上下游证明必不可少</li><li>替代方案：EMI电子钱包、数字银行等新型金融服务</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>银行对比：各主流银行开户门槛和费用横向评测</li><li>成功案例：一次通过银行开户面试的准备策略</li><li>趋势分析：传统银行vs数字银行在海外公司服务领域的竞争</li></ul>", source: "小红书", platform_class: "platform-xiaohongshu", author: "离岸账户攻略", time: "2026-03-30 15:45", heat: 5800, discussions: "18.3万", tags: ["银行开户", "KYC", "虚拟银行"], isHot: false },
+  { title: "代理董事（Nominee Director）的法律风险：便利背后的隐患", summary: "使用代理董事服务虽可满足当地法律要求并保护隐私，但在经济实质法和受益所有人披露制度下，代持安排面临越来越大的合规挑战。", detail: "代理董事的使用需要审慎评估法律风险。\n\n<h4>核心脚本要点</h4>\n<ul><li>法律地位：代理董事在法律上承担与正式董事相同的责任</li><li>经济实质冲突：代理董事可能无法满足\u201c在当地进行管理和决策\u201d的要求</li><li>受益所有人披露：多数司法管辖区要求披露最终实益拥有人信息</li><li>银行态度：越来越多银行拒绝为使用代理董事的公司开户</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>风险清单：使用代理董事可能面临的五大法律风险</li><li>替代方案：不依赖代理董事也能满足注册要求的方法</li><li>实务建议：如果必须使用代理董事，如何降低风险</li></ul>", source: "微信视频号", platform_class: "platform-shipinhao", author: "离岸合规律师", time: "2026-03-30 17:00", heat: 5200, discussions: "14.6万", tags: ["代理董事", "合规风险", "受益所有人"], isHot: false },
+  { title: "海外公司年度合规成本大比拼：各热门注册地维护费用一览", summary: "注册海外公司只是第一步，年度合规维护成本差异巨大。全面对比香港、新加坡、BVI、开曼、美国、英国等地的持续经营成本。", detail: "年度合规成本是选择注册地时常被忽略的重要因素。\n\n<h4>核心脚本要点</h4>\n<ul><li>香港：审计+报税+秘书约3-8万港币/年，视业务复杂度而定</li><li>新加坡：审计（部分豁免）+报税+秘书约5,000-15,000新币/年</li><li>BVI：年费+注册代理人约1,500-3,000美元/年，无需审计</li><li>开曼：政府年费+注册办事处约3,000-10,000美元/年</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>成本对比表：各注册地年度维护费用全面比较</li><li>隐性成本：容易被忽略的合规支出项目</li><li>选择建议：不同业务需求下的最优性价比注册地推荐</li></ul>", source: "知乎", platform_class: "platform-zhihu", author: "国际商务成本研究", time: "2026-03-30 18:15", heat: 4600, discussions: "12.4万", tags: ["合规成本", "年度维护", "费用对比"], isHot: false },
+  { title: "如何选择最适合的海外注册地：七大维度综合评估框架", summary: "面对众多离岸和在岸注册地选择，企业需要从税务效率、合规成本、银行便利性、声誉风险等多个维度综合评估，找到最适合自身的方案。", detail: "注册地选择是一个需要系统评估的战略决策。\n\n<h4>核心脚本要点</h4>\n<ul><li>维度一：税务效率——企业税率、税收协定网络、资本利得税</li><li>维度二：合规成本——注册费、年费、审计要求、经济实质成本</li><li>维度三：银行便利——开户难度、国际汇款便利性、银行服务质量</li><li>维度四：商业声誉——注册地在国际商业中的认可度和信誉</li></ul>\n<h4>创作角度建议</h4>\n<ul><li>评估框架：七大维度的详细评分方法和权重建议</li><li>场景推荐：电商、贸易、科技、投资等不同业务的最优注册地</li><li>决策工具：注册地选择的自评清单和决策树</li></ul>", source: "微信公众号", platform_class: "platform-weixin", author: "全球商业架构师", time: "2026-03-30 19:30", heat: 3800, discussions: "10.2万", tags: ["注册地选择", "评估框架", "离岸"], isHot: false }
+];
+
 // === STATE ===
 let currentTab = 'daily';
 let currentSource = 'all';
@@ -1004,7 +1105,12 @@ let currentSearch = '';
 function getData() {
   if (currentTab === 'daily') return DAILY_DATA;
   if (currentTab === 'weekly') return WEEKLY_DATA;
-  return MONTHLY_DATA;
+  if (currentTab === 'monthly') return MONTHLY_DATA;
+  if (currentTab === 'crs') return CRS_DATA;
+  if (currentTab === 'odi') return ODI_DATA;
+  if (currentTab === 'overseas_asset') return OVERSEAS_ASSET_DATA;
+  if (currentTab === 'overseas_company') return OVERSEAS_COMPANY_DATA;
+  return DAILY_DATA;
 }
 
 function filterAndSort(data) {
@@ -1091,11 +1197,14 @@ function switchTab(tab) {
 
   document.getElementById('weeklyBanner').classList.toggle('show', tab === 'weekly');
   document.getElementById('monthlyBanner').classList.toggle('show', tab === 'monthly');
+  document.getElementById('crsBanner').classList.toggle('show', tab === 'crs');
+  document.getElementById('odiBanner').classList.toggle('show', tab === 'odi');
+  document.getElementById('overseasAssetBanner').classList.toggle('show', tab === 'overseas_asset');
+  document.getElementById('overseasCompanyBanner').classList.toggle('show', tab === 'overseas_company');
 
   const statsLabel = document.querySelector('.stat-item:first-child .stat-label');
-  if (tab === 'daily') statsLabel.textContent = '今日热点';
-  else if (tab === 'weekly') statsLabel.textContent = '本周热点';
-  else statsLabel.textContent = '本月热点';
+  const labels = { daily: '今日热点', weekly: '本周热点', monthly: '本月热点', crs: 'CRS热点', odi: 'ODI热点', overseas_asset: '海外资产', overseas_company: '海外公司注册' };
+  statsLabel.textContent = labels[tab] || '热点';
 
   renderTopics();
 }
