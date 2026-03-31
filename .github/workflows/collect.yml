@@ -2,7 +2,9 @@ name: Collect Tax Hot Topics
 
 on:
   schedule:
+    # 00:00 UTC = 08:00 Beijing
     - cron: "0 0 * * *"
+    # 10:00 UTC = 18:00 Beijing
     - cron: "0 10 * * *"
   workflow_dispatch:
 
@@ -31,10 +33,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/
+          mkdir -p data
+          git add data/ --force
           if git diff --cached --quiet; then
             echo "No data changes to commit."
           else
-            git commit -m "chore: update tax data"
+            git commit -m "chore: update tax hot-topics data 6-03-31T00:54:02Z"
             git push
           fi
