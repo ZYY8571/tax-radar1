@@ -80,23 +80,27 @@ TAX_PHRASES = [
 ]
 
 CRS_KEYWORDS = [
-    "CRS", "共同申报准则", "税务信息交换", "海外账户申报",
-    "AEOI", "金融账户涉税", "CRS申报",
+    "CRS申报", "共同申报准则", "税务信息交换", "海外账户申报",
+    "AEOI", "金融账户涉税", "CRS合规", "涉税信息交换",
+    "非居民金融账户", "尽职调查", "自动交换",
 ]
 
 ODI_KEYWORDS = [
-    "ODI", "境外投资", "对外直接投资", "ODI备案",
-    "37号文", "返程投资", "海外投资架构",
+    "ODI备案", "境外投资备案", "对外直接投资", "境外投资管理",
+    "37号文", "返程投资", "海外投资架构", "境外投资审批",
+    "对外投资合规", "发改委境外投资",
 ]
 
 OVERSEAS_ASSET_KEYWORDS = [
-    "海外资产", "境外资产", "海外房产税", "全球征税",
-    "海外信托", "境外所得", "海外资产申报",
+    "海外资产申报", "境外资产申报", "海外房产税", "全球征税",
+    "海外信托", "境外所得申报", "海外资产配置税务",
+    "境外收入纳税", "海外资产合规", "个人境外所得",
 ]
 
 OVERSEAS_COMPANY_KEYWORDS = [
-    "海外公司注册", "离岸公司", "香港公司注册", "新加坡公司",
-    "BVI公司", "经济实质法", "离岸架构",
+    "海外公司注册", "离岸公司注册", "香港公司注册", "新加坡公司注册",
+    "BVI公司注册", "经济实质法", "离岸架构搭建",
+    "开曼公司", "海外公司税务", "注册离岸公司",
 ]
 
 # Search keywords per category (subset used for active search queries)
@@ -121,25 +125,25 @@ CATEGORY_CONFIG = {
     },
     "crs": {
         "keywords": CRS_KEYWORDS,
-        "search_terms": ["CRS申报", "税务信息交换", "海外账户申报"],
+        "search_terms": ["CRS申报 税务", "共同申报准则", "海外账户涉税申报"],
         "filter_keywords": CRS_KEYWORDS,
         "filter_phrases": [],
     },
     "odi": {
         "keywords": ODI_KEYWORDS,
-        "search_terms": ["ODI备案", "境外投资", "海外投资架构"],
+        "search_terms": ["ODI备案 境外投资", "境外投资备案流程", "海外投资架构 税务"],
         "filter_keywords": ODI_KEYWORDS,
         "filter_phrases": [],
     },
     "overseas_asset": {
         "keywords": OVERSEAS_ASSET_KEYWORDS,
-        "search_terms": ["海外资产申报", "境外资产", "全球征税"],
+        "search_terms": ["海外资产申报 税务", "境外资产 全球征税", "海外信托 税务"],
         "filter_keywords": OVERSEAS_ASSET_KEYWORDS,
         "filter_phrases": [],
     },
     "overseas_company": {
         "keywords": OVERSEAS_COMPANY_KEYWORDS,
-        "search_terms": ["离岸公司", "香港公司注册", "海外公司注册"],
+        "search_terms": ["离岸公司注册 税务", "香港公司注册 税务", "海外公司注册"],
         "filter_keywords": OVERSEAS_COMPANY_KEYWORDS,
         "filter_phrases": [],
     },

@@ -1363,21 +1363,34 @@ function getISOWeek(d) {
   return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
 }
 
+function fmtDate(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+async function tryFetchJSON(url) {
+  try { const r = await fetch(url); return r.ok ? await r.json() : null; } catch(_) { return null; }
+}
+
 async function loadJSONData() {
   try {
     const today = new Date();
-    const dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+    const dateStr = fmtDate(today);
+    const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = fmtDate(yesterday);
     const isoWeek = getISOWeek(today);
+    const lastWeek = getISOWeek(yesterday);
     const monthStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+    const lastMonth = new Date(today); lastMonth.setMonth(lastMonth.getMonth() - 1);
+    const lastMonthStr = `${lastMonth.getFullYear()}-${String(lastMonth.getMonth()+1).padStart(2,'0')}`;
 
     const [daily, weekly, monthly, crs, odi, overseasAsset, overseasCompany] = await Promise.allSettled([
-      fetch(`${DATA_BASE}/daily/${dateStr}.json`).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch(`${DATA_BASE}/weekly/${isoWeek}.json`).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch(`${DATA_BASE}/monthly/${monthStr}.json`).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch(`${DATA_BASE}/crs/latest.json`).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch(`${DATA_BASE}/odi/latest.json`).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch(`${DATA_BASE}/overseas_asset/latest.json`).then(r => r.ok ? r.json() : null).catch(() => null),
-      fetch(`${DATA_BASE}/overseas_company/latest.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+      tryFetchJSON(`${DATA_BASE}/daily/${dateStr}.json`).then(d => d || tryFetchJSON(`${DATA_BASE}/daily/${yesterdayStr}.json`)),
+      tryFetchJSON(`${DATA_BASE}/weekly/${isoWeek}.json`).then(d => d || tryFetchJSON(`${DATA_BASE}/weekly/${lastWeek}.json`)),
+      tryFetchJSON(`${DATA_BASE}/monthly/${monthStr}.json`).then(d => d || tryFetchJSON(`${DATA_BASE}/monthly/${lastMonthStr}.json`)),
+      tryFetchJSON(`${DATA_BASE}/crs/latest.json`),
+      tryFetchJSON(`${DATA_BASE}/odi/latest.json`),
+      tryFetchJSON(`${DATA_BASE}/overseas_asset/latest.json`),
+      tryFetchJSON(`${DATA_BASE}/overseas_company/latest.json`),
     ]);
 
     if (daily.status === 'fulfilled' && daily.value && daily.value.topics && daily.value.topics.length) {
